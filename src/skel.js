@@ -1238,6 +1238,7 @@ var skel = (function() {
 
 								// ELEMENT: (CSS) Grid / Zoom.
 								
+									id = 'gZ' + _.stateId;
 									s1 = '';
 									
 									for (i=1; i <= state.config.grid.zoom; i++)
@@ -1245,7 +1246,7 @@ var skel = (function() {
 								
 									// Build Element.
 										x = _.cacheNewElement(
-											'gZ' + state.config.grid.zoom,
+											id,
 											_.newInline(
 												s1
 											),
@@ -1875,7 +1876,8 @@ var skel = (function() {
 												c.grid.gutters = { vertical: c.grid.gutters, horizontal: c.grid.gutters };
 
 										// Update maxGridZoom.
-											_.maxGridZoom = Math.max(_.maxGridZoom, c.grid.zoom);
+											if ('zoom' in c.grid)
+												_.maxGridZoom = Math.max(_.maxGridZoom, c.grid.zoom);
 											
 									}
 								
