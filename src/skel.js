@@ -540,16 +540,24 @@ var skel = (function() {
 					// Important: Shifts cells marked as "important" to the top of their respective rows.
 						var m = '_skel_important',
 							i, x = [], ee;
-						
-						for (i=1; i <= _.maxGridZoom; i++) {
-							
-							ee = _.getElementsByClassName('important(' + i + ') ');
+
+						// Zoom.
+							for (i=1; i <= _.maxGridZoom; i++) {
+								
+								ee = _.getElementsByClassName('important(' + i + ') ');
+								
+								_.iterate(ee, function(k) {
+									x.push(ee[k]);
+								});
+								
+							}
+
+						// Collapse.
+							ee = _.getElementsByClassName('important(collapse) ');
 							
 							_.iterate(ee, function(k) {
 								x.push(ee[k]);
 							});
-							
-						}
 						
 						if (x && x.length > 0)
 							_.iterate(x, function(i) {
@@ -557,23 +565,16 @@ var skel = (function() {
 								if (i === 'length')
 									return;
 								
-								var e = x[i],
-									k,
-									p = e.parentNode,
-									pc;
+								var e = x[i], p = e.parentNode,
+									k;
 								
 								// No parent? Bail.
 									if (!p)
 										return;
-								
-								// Get zoom level.
-									if (e.className.match(/important\(([0-9])\)/))
-										pc = parseInt(RegExp.$1);
-									else
-										return;
-								
-								// Meets our current zoomlevel? Move cell.
-									if (pc <= state.config.grid.zoom) {
+
+								// Meets move conditions? Proceed to move cell.
+									if ((e.className.match(/important\(collapse\)/) && state.config.grid.collapse)
+									|| (e.className.match(/important\(([0-9])\)/) && (parseInt(RegExp.$1) <= state.config.grid.zoom))) {
 										
 										// If we're already collapsed, bail.
 											if (e.hasOwnProperty(m) && e[m] !== false)
@@ -1261,10 +1262,12 @@ var skel = (function() {
 								// ELEMENT: (CSS) Grid / Collapse.
 
 									if (state.config.grid.collapse) {
+
+										id = 'gC' + _.stateId;
 										
 										// Build Element.
 											x = _.cacheNewElement(
-												'gC',
+												id,
 												_.newInline(
 													'.row:not(.no-collapse)>*{' +
 														'width:100%!important;' +
