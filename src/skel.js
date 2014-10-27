@@ -85,8 +85,11 @@ var skel = (function() {
 			
 				// Grid.
 					grid: {
+						
+						// Zoom.
+							zoom: 1,
 					
-						// Sets collapse mode (false = don't collapse, true = collapse everything, N = collapse up to level N (see docs)).
+						// Sets collapse mode (false = don't collapse, true = collapse everything).
 							collapse: false,
 						
 						// Size of vertical and horizontal gutters (both N, 'Npx', 'Nem', etc).
@@ -136,7 +139,49 @@ var skel = (function() {
 
 				// Reset.
 				// http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 | License: none (public domain)
-					r: 'html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:\'\';content:none}table{border-collapse:collapse;border-spacing:0}body{-webkit-text-size-adjust:none}'
+					r: 'html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:\'\';content:none}table{border-collapse:collapse;border-spacing:0}body{-webkit-text-size-adjust:none}',
+				
+				// Grid cells.
+					gc: function(x) {
+						return	'.\\31 2u'+x+',.\\31 2u\\24'+x+'{width:100%;clear:none}' + 
+								'.\\31 1u'+x+',.\\31 1u\\24'+x+'{width:91.6666666667%;clear:none}' + 
+								'.\\31 0u'+x+',.\\31 0u\\24'+x+'{width:83.3333333333%;clear:none}' + 
+								'.\\39 u'+x+',.\\39 u\\24'+x+'{width:75%;clear:none}' + 
+								'.\\38 u'+x+',.\\38 u\\24'+x+'{width:66.6666666667%;clear:none}' + 
+								'.\\37 u'+x+',.\\37 u\\24'+x+'{width:58.3333333333%;clear:none}' + 
+								'.\\36 u'+x+',.\\36 u\\24'+x+'{width:50%;clear:none}' + 
+								'.\\35 u'+x+',.\\35 u\\24'+x+'{width:41.6666666667%;clear:none}' + 
+								'.\\34 u'+x+',.\\34 u\\24'+x+'{width:33.3333333333%; clear: none}' +
+								'.\\33 u'+x+',.\\33 u\\24'+x+'{width:25%;clear:none}' + 
+								'.\\32 u'+x+',.\\32 u\\24'+x+'{width:16.6666666667%;clear:none}' + 
+								'.\\31 u'+x+',.\\31 u\\24'+x+'{width:8.3333333333%;clear:none}' + 
+								'.\\31 2u\\24'+x+'+*,' +
+								'.\\31 1u\\24'+x+'+*,' +
+								'.\\31 0u\\24'+x+'+*,' +
+								'.\\39 u\\24'+x+'+*,' +
+								'.\\38 u\\24'+x+'+*,' +
+								'.\\37 u\\24'+x+'+*,' +
+								'.\\36 u\\24'+x+'+*,' +
+								'.\\35 u\\24'+x+'+*,' +
+								'.\\34 u\\24'+x+'+*,' +
+								'.\\33 u\\24'+x+'+*,' +
+								'.\\32 u\\24'+x+'+*' +
+								'.\\31 u\\24'+x+'+*{' +
+									'clear:left;' +
+								'}' +
+								'.\\-11u{margin-left:91.6666666667%}' +
+								'.\\-10u{margin-left:83.3333333333%}' +
+								'.\\-9u{margin-left:75%}' +
+								'.\\-8u{margin-left:66.6666666667%}' +
+								'.\\-7u{margin-left:58.3333333333%}' +
+								'.\\-6u{margin-left:50%}' +
+								'.\\-5u{margin-left:41.6666666667%}' +
+								'.\\-4u{margin-left:33.3333333333%}' +
+								'.\\-3u{margin-left:25%}' +
+								'.\\-2u{margin-left:16.6666666667%}' +
+								'.\\-1u{margin-left:8.3333333333%}';
+
+					}
 				
 			},
 
@@ -354,20 +399,6 @@ var skel = (function() {
 				},
 
 				/**
-				 * Converts a "level" setting (like collapse) to an integer.
-				 * @return {integer} Level.
-				 */
-				getLevel: function(x) {
-					
-					// Boolean? True = 100, false = 0.
-						if (typeof x == 'boolean')
-							return (x ? 100 : 0);
-						
-					return parseInt(x);
-
-				},
-
-				/**
 				 * Parses a CSS measurement string (eg. 960, '960px', '313.37em') and splits it into its numeric and unit parts.
 				 * @param {string} x CSS measurement.
 				 * @return {Array} Results, where element 0 = (float) numeric part, and 1 = (string) unit part.
@@ -490,107 +521,22 @@ var skel = (function() {
 				 */
 				applyRowTransforms: function(state) {
 
-					var x, m, p,
-						collapseLevel = _.getLevel(state.config.grid.collapse);
-
 					// RTL: Performs a few adjustments to get things working nicely on RTL.
 						if (_.config.RTL) {
 							
 							_.unreverseRows();
 
-							if (collapseLevel > 0)
-								_.reverseRows(collapseLevel);
+							if (state.config.grid.collapse)
+								_.reverseRows();
 						
 						}
-					
-					// important: When collapsed, shifts cells marked as "important" to the top of their respective rows.
-						m = '_skel_cell_important_placeholder';
-						x = _.getElementsByClassName('skel-cell-important');
-
-						if (x && x.length > 0)
-							_.iterate(x, function(i) {
-
-								if (i === 'length')
-									return;
-								
-								var e = x[i],
-									k,
-									p = e.parentNode,
-									pc;
-								
-								// No parent? Bail.
-									if (!p)
-										return;
-								
-								// Figure out the point at which this cell's row collapses.
-									if (p.className.match(/no-collapse/))
-										pc = 101;
-									else if (p.className.match(/collapse-at-([0-9])/))
-										pc = parseInt(RegExp.$1);
-									else
-										pc = 0;
-								
-								// Row's going to collapse? Proceed with moving cell.
-									if (collapseLevel > 0 && pc <= collapseLevel) {
-										
-										// If we're already collapsed, bail.
-											if (e.hasOwnProperty(m) && e[m] !== false)
-												return;
-										
-										// Get sibling.
-											k = (_.config.RTL ? 'nextSibling' : 'previousSibling');
-
-											p = e[k];
-											
-											while ( p && p.nodeName == '#text' )
-												p = p[k];
-											
-										// No previous sibling? Bail, because we're already at the top of the row.
-											if (!p)
-												return;
-
-										// Move cell to top.
-											console.log('[skel] important: moving to top of row (' + i + ')');
-											e.parentNode.insertBefore(e, e.parentNode.firstChild);
-											
-										// Set placeholder property on cell.
-											e[m] = p;
-
-									}
-								// Otherwise, undo the move (if one was performed previously).
-									else {
-										
-										// If the cell hasn't been moved before it won't have a placeholder, so just set it to false.
-											if (!e.hasOwnProperty(m))
-												e[m] = false;
-
-										// Get placeholder.
-											p = e[m];
-										
-										// If it's not false, move cell back.
-											if (p !== false) {
-												
-												console.log('[skel] important: moving back (' + i + ')');
-
-												// Move e after placeholder.
-													e.parentNode.insertBefore(e, p.nextSibling);
-
-												// Clear placeholder property on cell.
-													e[m] = false;
-											
-											}
-
-									}
-							
-							});
 
 				},
 
 				/**
 				 * Reverses all rows.
-				 * @param {integer} collapseLevel If specified, only reverse rows with a no-collapse level below this level.
 				 */
-				reverseRows: function(collapseLevel) {
+				reverseRows: function() {
 				
 					var x = _.getElementsByClassName('row');
 					
@@ -602,8 +548,7 @@ var skel = (function() {
 						var	row = x[i];
 
 						// If the row has already been reversed, or it falls below a given no-collapse level, bail.
-							if (row._skel_isReversed
-							||	(collapseLevel > 0 && row.className.match(/\bcollapse-at-([0-9])\b/) && parseInt(RegExp.$1) >= collapseLevel))
+							if (row._skel_isReversed)
 								return;
 						
 						// Reverse the row.
@@ -1002,7 +947,7 @@ var skel = (function() {
 				changeState: function(newStateId) {
 
 					var	breakpointIds, location, state,
-						a, x, id, s1, s2;
+						a, x, i, id, s1, s2;
 
 					// 1. Set last state var.
 						_.vars.lastStateId = _.stateId;
@@ -1084,17 +1029,17 @@ var skel = (function() {
 
 								// ELEMENT: (CSS) Containers.
 									
-									var containerWidth, containerUnits;
+									var C, Cu;
 										
 									// Determine width, units, and id.
 										
 										// Split "containers" into width and units.
 											a = _.parseMeasurement(state.config.containers);
-											containerWidth = a[0];
-											containerUnits = a[1];
+											C = a[0];
+											Cu = a[1];
 
 										// Set "containers" state value (needed for later).
-											state.values.containers = containerWidth + containerUnits;
+											state.values.containers = C + Cu;
 									
 										// Set id.
 											id = 'iC' + state.values.containers;
@@ -1102,27 +1047,16 @@ var skel = (function() {
 									// Get element.
 										if (!(x = _.getCachedElement(id))) {
 											
-											var	cs, cn, cl;
-
-											// Set up values.
-												
-												// Small.
-													cs = (containerWidth * 0.75) + containerUnits;
-												
-												// Normal.
-													cn = containerWidth + containerUnits;
-												
-												// Large.
-													cl = (containerWidth * 1.25) + containerUnits;
-
 											// Build element.
 												x = _.cacheNewElement(
 													id,
 													_.newInline(
-														'body{min-width:' + cn +'}' +
-														'.container{margin-left:auto;margin-right:auto;width:' + cn + '}' +
-														'.container.small{width:' + cs + '}' + 
-														'.container.large{width:100%;max-width:' + cl + ';min-width:' + cn + '}'
+														'body{min-width:' + C +'}' +
+														'.container{margin-left:auto;margin-right:auto;width:' + (C*1)+Cu + '}' +
+														'.container.\\31 25\\25{width:100%;max-width:' + (C*1.25)+Cu + ';min-width:' + C + '}' +
+														'.container.\\37 5\\25{width:' + (C*0.75)+Cu + '}' +
+														'.container.\\35 0\\25{width:' + (C*0.5)+Cu + '}' +
+														'.container.\\32 5\\25{width:' + (C*0.25)+Cu + '}'
 													),
 													'head',
 													3
@@ -1142,77 +1076,59 @@ var skel = (function() {
 										if (!(x = _.getCachedElement(id))) {
 											
 											// Vertical.
-												var VgutterSize, VgutterUnits,
-													Vgn, Vgh, Vgq, Vgoh, Vgd;
+												var V, Vu;
 
 												// Split into size and units.
 													a = _.parseMeasurement(state.config.grid.gutters.vertical);
-													VgutterSize = a[0];
-													VgutterUnits = a[1];
+													V = a[0];
+													Vu = a[1];
 												
-												// Set up values.
-													Vgn = (VgutterSize) + VgutterUnits;
-													Vgh = (VgutterSize / 2) + VgutterUnits;
-													Vgq = (VgutterSize / 4) + VgutterUnits;
-													Vgoh = (VgutterSize * 1.5) + VgutterUnits;
-													Vgd = (VgutterSize * 2) + VgutterUnits;
-													
 											// Horizontal.
-												var HgutterSize, HgutterUnits,
-													Hgn, Hgh, Hgq, Hgoh, Hgd;
+												var H, Hu;
 
 												// Split into size and units.
 													a = _.parseMeasurement(state.config.grid.gutters.horizontal);
-													HgutterSize = a[0];
-													HgutterUnits = a[1];
+													H = a[0];
+													Hu = a[1];
 												
-												// Set up values.
-													Hgn = (HgutterSize) + HgutterUnits;
-													Hgh = (HgutterSize / 2) + HgutterUnits;
-													Hgq = (HgutterSize / 4) + HgutterUnits;
-													Hgoh = (HgutterSize * 1.5) + HgutterUnits;
-													Hgd = (HgutterSize * 2) + HgutterUnits;
-
 											// Build element.
 												x = _.cacheNewElement(
 													'iGG' + state.config.grid.gutters.vertical + '_' + state.config.grid.gutters.horizontal, 
 													_.newInline(
 														
 														// Normal.
-															'.row>*{padding-left:' + Vgn + '}' +
-															'.row+.row>*{padding:' + Hgn + ' 0 0 ' + Vgn + '}' +
-															'.row{margin-left:-' + Vgn + '}' +
-															'.row+.row.uniform>*{padding:' + Vgn + ' 0 0 ' + Vgn + '}' +
+															'.row>*{padding:' + (H*1)+Hu + ' 0 0 ' + (V*1)+Vu + '}' +
+															'.row{margin:' + (H*-1)+Hu + ' 0 0 ' + (V*-1)+Vu + '}' +
+															'.row.uniform>*{padding:' + (V*1)+Vu + ' 0 0 ' + (V*1)+Vu + '}' +
+															'.row.uniform{margin:' + (V*-1)+Vu + ' 0 0 ' + (V*-1)+Vu + '}' +
 														
-														// Flush.
-															'.row.flush>*{padding-left:0}' +
-															'.row+.row.flush>*{padding:0}' +
-															'.row.flush{margin-left:0}' +
-															'.row+.row.uniform.flush>*{padding:0}' +
+														// 200%
+															'.row.\\32 00\\25>*{padding:' + (H*2)+Hu + ' 0 0 ' + (V*2)+Vu + '}' +
+															'.row.\\32 00\\25{margin:' + (H*-2)+Hu + ' 0 0 ' + (V*-2)+Vu + '}' +
+															'.row.uniform.\\32 00\\25>*{padding:' + (V*2)+Vu + ' 0 0 ' + (V*2)+Vu + '}' +
+															'.row.uniform.\\32 00\\25{margin:' + (V*-2)+Vu + ' 0 0 ' + (V*-2)+Vu + '}' +
 														
-														// Half.
-															'.row.half>*{padding-left:' + Vgh + '}' +
-															'.row+.row.half>*{padding:' + Hgh + ' 0 0 ' + Vgh + '}' +
-															'.row.half{margin-left:-' + Vgh + '}' +
-															'.row+.row.uniform.half>*{padding:' + Vgh + ' 0 0 ' + Vgh + '}' +
+														// 150%
+															'.row.\\31 50\\25>*{padding:' + (H*1.5)+Hu + ' 0 0 ' + (V*1.5)+Vu + '}' +
+															'.row.\\31 50\\25{margin:' + (H*-1.5)+Hu + ' 0 0 ' + (V*-1.5)+Vu + '}' +
+															'.row.uniform.\\31 50\\25>*{padding:' + (V*1.5)+Vu + ' 0 0 ' + (V*1.5)+Vu + '}' +
+															'.row.uniform.\\31 50\\25{margin:' + (V*-1.5)+Vu + ' 0 0 ' + (V*-1.5)+Vu + '}' +
 														
-														// Quarter.
-															'.row.quarter>*{padding-left:' + Vgq + '}' +
-															'.row+.row.quarter>*{padding:' + Hgq + ' 0 0 ' + Vgq + '}' +
-															'.row.quarter{margin-left:-' + Vgq + '}' +
-															'.row+.row.uniform.quarter>*{padding:' + Vgq + ' 0 0 ' + Vgq + '}' +
+														// 50%
+															'.row.\\35 0\\25>*{padding:' + (H*0.5)+Hu + ' 0 0 ' + (V*0.5)+Vu + '}' +
+															'.row.\\35 0\\25{margin:' + (H*-0.5)+Hu + ' 0 0 ' + (V*-0.5)+Vu + '}' +
+															'.row.uniform.\\35 0\\25>*{padding:' + (V*0.5)+Vu + ' 0 0 ' + (V*0.5)+Vu + '}' +
+															'.row.uniform.\\35 0\\25{margin:' + (V*-0.5)+Vu + ' 0 0 ' + (V*-0.5)+Vu + '}' +
 														
-														// One and (a) Half.
-															'.row.oneandhalf>*{padding-left:' + Vgoh + '}' +
-															'.row+.row.oneandhalf>*{padding:' + Hgoh + ' 0 0 ' + Vgoh + '}' +
-															'.row.oneandhalf{margin-left:-' + Vgoh + '}' +
-															'.row+.row.uniform.oneandhalf>*{padding:' + Vgoh + ' 0 0 ' + Vgoh + '}' +
+														// 25%
+															'.row.\\32 5\\25>*{padding:' + (H*0.25)+Hu + ' 0 0 ' + (V*0.25)+Vu + '}' +
+															'.row.\\32 5\\25{margin:' + (H*-0.25)+Hu + ' 0 0 ' + (V*-0.25)+Vu + '}' +
+															'.row.uniform.\\32 5\\25>*{padding:' + (V*0.25)+Vu + ' 0 0 ' + (V*0.25)+Vu + '}' +
+															'.row.uniform.\\32 5\\25{margin:' + (V*-0.25)+Vu + ' 0 0 ' + (V*-0.25)+Vu + '}' +
 														
-														// Double.
-															'.row.double>*{padding-left:' + Vgd + '}' +
-															'.row+.row.double>*{padding:' + Hgd + ' 0 0 ' + Vgd + '}' +
-															'.row.double{margin-left:-' + Vgd + '}' +
-															'.row+.row.uniform.double>*{padding:' + Vgd + ' 0 0 ' + Vgd + '}'
+														// 0%
+															'.row.\\30 \\25>*{padding:0}' +
+															'.row.\\30 \\25{margin:0}'
 													
 													), 
 													'head', 
@@ -1225,146 +1141,44 @@ var skel = (function() {
 										console.log('[skel] -- ' + id);
 										state.elements.push(x);
 
+								// ELEMENT: (CSS) Grid / Zoom.
+								
+									s1 = '';
+									
+									for (i=1; i <= state.config.grid.zoom; i++)
+										s1 += _.css.gc('\\28 ' + i + '\\29');
+								
+									// Build Element.
+										x = _.cacheNewElement(
+											'gZ' + state.config.grid.zoom,
+											_.newInline(
+												s1
+											),
+											'head', 
+											3
+										);
+
+									// Push to state.
+										console.log('[skel] -- ' + id);
+										state.elements.push(x);
+
 								// ELEMENT: (CSS) Grid / Collapse.
 
 									if (state.config.grid.collapse) {
 										
-										var	collapseLevel = _.getLevel(state.config.grid.collapse),
-											Vg, Hg;
-									
-										id = 'iGC' + collapseLevel + '-' + state.values.containers;
-									
-										// Get element.
-											if (!(x = _.getCachedElement(id))) {
+										// Build Element.
+											x = _.cacheNewElement(
+												'gC',
+												_.newInline(
+													'.row:not(.no-collapse)>*{' +
+														'width:100%!important;' +
+														'margin-left:0!important' +
+													'}'
+												),
+												'head', 
+												3
+											);
 
-												// Collapse.
-													s1 = ':not(.no-collapse)';
-													
-													switch (collapseLevel) {
-														
-														case 4:
-															break;
-
-														case 3:
-															s1 += ':not(.collapse-at-4)';
-															break;
-
-														case 2:
-															s1 += ':not(.collapse-at-4):not(.collapse-at-3)';
-															break;
-
-														case 1:
-															s1 += ':not(.collapse-at-4):not(.collapse-at-3):not(.collapse-at-2)';
-															break;
-													
-													}
-
-												// Gutters.
-												
-													// Vertical.
-														a = _.parseMeasurement(state.config.grid.gutters.vertical);
-														Vg = a[0] + a[1];
-												
-													// Horizontal.
-														a = _.parseMeasurement(state.config.grid.gutters.horizontal);
-														Hg = a[0] + a[1];
-												
-												// Build Element.
-													x = _.cacheNewElement(
-														id,
-														_.newInline(
-
-															/* Reset all rows to gutter */
-
-																'.row>*{' +
-																	'padding-left:' + Vg + '!important' +
-																'}' +
-
-																'.row>*:first-child{' +
-																	'padding-top:0!important' +
-																'}' +
-
-																'.row+.row>*{' +
-																	'padding:' + Hg + ' 0 0 ' + Vg + '!important' +
-																'}' +
-																
-																'.row+.row.uniform>*{' +
-																	'padding:' + Vg + ' 0 0 ' + Vg + '!important' +
-																'}' +
-																
-																'.row{' +
-																	'margin-left:-' + Vg + '!important' +
-																'}' +
-
-															/* Collapse */
-
-																'.row' + s1 + '>*{' +
-																	'float:none!important;' +
-																	'width:100%!important;' +
-																	'margin-left:0!important' +
-																'}' +
-
-																'.row:not(.flush)' + s1 + ':first-child>*{' +
-																	'padding-top:' + Hg + '!important' +
-																'}' +
-
-																'.row.uniform:not(.flush)' + s1 + ':first-child>*{' +
-																	'padding-top:' + Vg + '!important' +
-																'}' +
-
-																'.row' + s1 + ':first-child>:first-child {' +
-																	'padding-top:0!important' +
-																'}' +
-
-																'.row.uniform' + s1 + ':first-child>:first-child {' +
-																	'padding-top:0!important' +
-																'}' +
-
-																'.row' + s1 + '>*{' +
-																	'padding-top:' + Hg +
-																'}' +
-
-																'.row.uniform' + s1 + '>*{' +
-																	'padding-top:' + Vg +
-																'}' +
-
-																'.row' + s1 + '>*:first-child{' +
-																	'padding-top:0' +
-																'}' +
-
-																'.row+.row' + s1 + '>*{' +
-																	'padding:' + Hg + ' 0 0 ' + Vg +
-																'}' +
-
-																'.row+.row.uniform' + s1 + '>*{' +
-																	'padding:' + Vg + ' 0 0 ' + Vg +
-																'}' +
-
-															/* Bring back flush */
-															
-																'.row.flush>*{' +
-																	'padding:0!important' +
-																'}' +
-															
-																'.row.flush{' +
-																	'margin-left:0px!important' +
-																'}' +
-																
-															/* Fix container */			
-															
-																'.container{' +
-																	'max-width:none!important;' +
-																	'min-width:0!important;' +
-																	'width:' + state.config.containers + '!important' +
-																'}'
-
-														),
-														'head', 
-														3
-													);
-											
-											}
-										
 										// Push to state.
 											console.log('[skel] -- ' + id);
 											state.elements.push(x);						
@@ -2078,44 +1892,12 @@ var skel = (function() {
 						a.push(_.newElement(
 							'iG', 
 							_.newInline(
-								'.\\31 2u{width:100%}' +
-								'.\\31 1u{width:91.6666666667%}' +
-								'.\\31 0u{width:83.3333333333%}' +
-								'.\\39 u{width:75%}' +
-								'.\\38 u{width:66.6666666667%}' +
-								'.\\37 u{width:58.3333333333%}' +
-								'.\\36 u{width:50%}' +
-								'.\\35 u{width:41.6666666667%}' +
-								'.\\34 u{width:33.3333333333%}' +
-								'.\\33 u{width:25%}' +
-								'.\\32 u{width:16.6666666667%}' +
-								'.\\31 u{width:8.3333333333%}' +
-								'.\\-11u{margin-left:91.6666666667%}' +
-								'.\\-10u{margin-left:83.3333333333%}' +
-								'.\\-9u{margin-left:75%}' +
-								'.\\-8u{margin-left:66.6666666667%}' +
-								'.\\-7u{margin-left:58.3333333333%}' +
-								'.\\-6u{margin-left:50%}' +
-								'.\\-5u{margin-left:41.6666666667%}' +
-								'.\\-4u{margin-left:33.3333333333%}' +
-								'.\\-3u{margin-left:25%}' +
-								'.\\-2u{margin-left:16.6666666667%}' +
-								'.\\-1u{margin-left:8.3333333333%}'
-							),
-							'head', 
-							3
-						)); 
-
-					// ELEMENT: (CSS) Grid / Rows.
-
-						a.push(_.newElement(
-							'iGR',
-							_.newInline(
+								'.row{border-bottom:solid 1px transparent}' +
 								'.row>*{float:left}' +
-								'.row:after{content:\'\';display:block;clear:both;height:0}' +
-								'.row:first-child>*{padding-top:0!important}' +
+								'.row:after,.row:before{content:"";display:block;clear:both;height:0}' +
 								'.row.uniform>*>:first-child{margin-top:0}' +
-								'.row.uniform>*>:last-child{margin-bottom:0}'
+								'.row.uniform>*>:last-child{margin-bottom:0}' +
+								_.css.gc('')
 							),
 							'head', 
 							3
@@ -2418,7 +2200,7 @@ var skel = (function() {
 			if (_.vars.IEVersion < 9) {
 
 				// applyRowTransforms.
-				// Row transforms don't work (collapse, RTL stuff), so we eliminate them entirely.
+				// Row transforms don't work (RTL stuff), so we eliminate them entirely.
 					_.applyRowTransforms = function(state) { };
 
 				// newInline.
