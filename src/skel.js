@@ -271,7 +271,13 @@ var skel = (function() {
 					html: null
 				
 			},
-				
+			
+			/**
+			 * Maximum grid zoom.
+			 * @type integer
+			 */
+			maxGridZoom: 1,
+			
 			/**
 			 * My <script> element.
 			 * @type {DOMHTMLElement}
@@ -530,6 +536,95 @@ var skel = (function() {
 								_.reverseRows();
 						
 						}
+
+					// Important: Shifts cells marked as "important" to the top of their respective rows.
+						var m = '_skel_important',
+							i, x = [], ee;
+						
+						for (i=1; i <= _.maxGridZoom; i++) {
+							
+							ee = _.getElementsByClassName('important(' + i + ') ');
+							
+							_.iterate(ee, function(k) {
+								x.push(ee[k]);
+							});
+							
+						}
+						
+						if (x && x.length > 0)
+							_.iterate(x, function(i) {
+
+								if (i === 'length')
+									return;
+								
+								var e = x[i],
+									k,
+									p = e.parentNode,
+									pc;
+								
+								// No parent? Bail.
+									if (!p)
+										return;
+								
+								// Get zoom level.
+									if (e.className.match(/important\(([0-9])\)/))
+										pc = parseInt(RegExp.$1);
+									else
+										return;
+								
+								// Meets our current zoomlevel? Move cell.
+									if (pc <= state.config.grid.zoom) {
+										
+										// If we're already collapsed, bail.
+											if (e.hasOwnProperty(m) && e[m] !== false)
+												return;
+										
+										// Get sibling.
+											k = (_.config.RTL ? 'nextSibling' : 'previousSibling');
+
+											p = e[k];
+											
+											while ( p && p.nodeName == '#text' )
+												p = p[k];
+											
+										// No previous sibling? Bail, because we're already at the top of the row.
+											if (!p)
+												return;
+
+										// Move cell to top.
+											console.log('[skel] important: moving to top of row (' + i + ')');
+											e.parentNode.insertBefore(e, e.parentNode.firstChild);
+											
+										// Set placeholder property on cell.
+											e[m] = p;
+
+									}
+								// Otherwise, undo the move (if one was performed previously).
+									else {
+										
+										// If the cell hasn't been moved before it won't have a placeholder, so just set it to false.
+											if (!e.hasOwnProperty(m))
+												e[m] = false;
+
+										// Get placeholder.
+											p = e[m];
+										
+										// If it's not false, move cell back.
+											if (p !== false) {
+												
+												console.log('[skel] important: moving back (' + i + ')');
+
+												// Move e after placeholder.
+													e.parentNode.insertBefore(e, p.nextSibling);
+
+												// Clear placeholder property on cell.
+													e[m] = false;
+											
+											}
+
+									}
+							
+							});
 
 				},
 
@@ -1708,16 +1803,20 @@ var skel = (function() {
 							
 							}
 
-						// Extend base breakpoint config's grid by config's grid.
-							
-							// grid.gutters
+						// Grid config.
+
+							// gutters.
 								if ('grid' in _.config
 								&&	'gutters' in _.config.grid
 								&&	typeof _.config.grid.gutters != 'object')
 									_.config.grid.gutters = { vertical: _.config.grid.gutters, horizontal: _.config.grid.gutters };
 							
-							_.extend(_.defaults.config_breakpoint.grid, _.config.grid);
-							
+							// Extend base breakpoint config's grid by config's grid.
+								_.extend(_.defaults.config_breakpoint.grid, _.config.grid);
+
+							// Update maxGridZoom.
+								_.maxGridZoom = Math.max(_.maxGridZoom, _.config.grid.zoom);
+													
 						// Set base breakpoint config's containers to config's containers.
 							_.defaults.config_breakpoint.containers = _.config.containers;
 					
@@ -1767,11 +1866,18 @@ var skel = (function() {
 										
 									}
 
-								// grid.gutters
-									if ('grid' in c
-									&&	'gutters' in c.grid
-									&&	typeof c.grid.gutters != 'object')
-										c.grid.gutters = { vertical: c.grid.gutters, horizontal: c.grid.gutters };
+								// grid
+									if ('grid' in c) {
+										
+										// gutters.
+											if ('gutters' in c.grid
+											&&	typeof c.grid.gutters != 'object')
+												c.grid.gutters = { vertical: c.grid.gutters, horizontal: c.grid.gutters };
+
+										// Update maxGridZoom.
+											_.maxGridZoom = Math.max(_.maxGridZoom, c.grid.zoom);
+											
+									}
 								
 								_.config.breakpoints[id] = c;
 							
