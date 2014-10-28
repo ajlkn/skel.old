@@ -92,12 +92,9 @@ var skel = (function() {
 						// Sets collapse mode (false = don't collapse, true = collapse everything).
 							collapse: false,
 						
-						// Size of vertical and horizontal gutters (both N, 'Npx', 'Nem', etc).
-						// Note: Setting this to a non-object value will make skel use that value for both.
-							gutters: {
-								vertical: 40,
-								horizontal: 0
-							}
+						// Size of [vertical, horizontal] gutters (N, 'Npx', 'Nem', etc).
+						// Setting this to a non-array value will set both gutters to that value.
+							gutters: [40, 0]
 					
 					},
 				
@@ -1166,7 +1163,7 @@ var skel = (function() {
 
 								// ELEMENT: (CSS) Grid / Rows / Gutters.
 									
-									id = 'iGG' + state.config.grid.gutters.vertical + '_' + state.config.grid.gutters.horizontal;
+									id = 'iGG' + state.config.grid.gutters[0] + '_' + state.config.grid.gutters[1];
 
 									// Get element.
 										if (!(x = _.getCachedElement(id))) {
@@ -1175,7 +1172,7 @@ var skel = (function() {
 												var V, Vu;
 
 												// Split into size and units.
-													a = _.parseMeasurement(state.config.grid.gutters.vertical);
+													a = _.parseMeasurement(state.config.grid.gutters[0]);
 													V = a[0];
 													Vu = a[1];
 												
@@ -1183,13 +1180,13 @@ var skel = (function() {
 												var H, Hu;
 
 												// Split into size and units.
-													a = _.parseMeasurement(state.config.grid.gutters.horizontal);
+													a = _.parseMeasurement(state.config.grid.gutters[1]);
 													H = a[0];
 													Hu = a[1];
 												
 											// Build element.
 												x = _.cacheNewElement(
-													'iGG' + state.config.grid.gutters.vertical + '_' + state.config.grid.gutters.horizontal, 
+													'iGG' + state.config.grid.gutters[0] + '_' + state.config.grid.gutters[1], 
 													_.newInline(
 														
 														// Normal.
@@ -1809,11 +1806,11 @@ var skel = (function() {
 
 						// Grid config.
 
-							// gutters.
+							// Gutters.
 								if ('grid' in _.config
 								&&	'gutters' in _.config.grid
-								&&	typeof _.config.grid.gutters != 'object')
-									_.config.grid.gutters = { vertical: _.config.grid.gutters, horizontal: _.config.grid.gutters };
+								&&	!_.isArray(_.config.grid.gutters))
+									_.config.grid.gutters = [_.config.grid.gutters, _.config.grid.gutters];
 							
 							// Extend base breakpoint config's grid by config's grid.
 								_.extend(_.defaults.config_breakpoint.grid, _.config.grid);
@@ -1873,10 +1870,10 @@ var skel = (function() {
 								// grid
 									if ('grid' in c) {
 										
-										// gutters.
+										// Gutters.
 											if ('gutters' in c.grid
-											&&	typeof c.grid.gutters != 'object')
-												c.grid.gutters = { vertical: c.grid.gutters, horizontal: c.grid.gutters };
+											&&	!_.isArray(c.grid.gutters))
+												c.grid.gutters = [c.grid.gutters, c.grid.gutters];
 
 										// Update maxGridZoom.
 											if ('zoom' in c.grid)
