@@ -97,6 +97,17 @@ var skel = (function() {
 							gutters: [40, 0]
 					
 					},
+					
+				// Lock.
+					lock: {
+						
+						// If true, makes the lock permanent. If false, clears lock at the end of client's session.
+							permanent: true,
+						
+						// Path to which the lock applies (false = current path only, '/' = sitewide).
+							path: false
+					
+					},
 				
 				// Plugins.
 					plugins: {},
@@ -276,6 +287,12 @@ var skel = (function() {
 					html: null
 				
 			},
+
+			/**
+			 * Lock cookie name.
+			 * @type {string}
+			 */
+			lcn: '_skel_lock',
 			
 			/**
 			 * Maximum grid zoom.
@@ -487,6 +504,57 @@ var skel = (function() {
 					return (_.indexOf(_.stateId, _.sd + k) !== -1);
 
 				},
+
+				/**
+				 * Locks the viewport to a specific width and/or height and reloads the page.
+				 * @param {integer} w Width.
+				 * @param {integer} h Height.
+				 */
+				lock: function(w, h) {
+
+					// Set var.
+						_.vars.lock = [w, h];
+
+					// Set cookie.
+						document.cookie =	_.lcn + '=' + _.vars.lock.join('_') +
+											(_.config.lock.path ? ';path=' + _.config.lock.path : '') +
+											(_.config.lock.permanent ? ';expires=Tue, 19 Jan 2038 03:14:07 GMT' : '');
+						
+						console.log('[skel] locking to ' + _.vars.lock);
+					
+					// Reload.
+						window.location.reload();
+
+				},
+				
+				/**
+				 * Determines if a lock is in effect.
+				 */
+				locked: function() {
+					
+					return (!!_.vars.lock && _.isArray(_.vars.lock));
+				
+				},
+
+				/**
+				 * Removes a previously set viewport lock and reloads the page.
+				 */
+				unlock: function() {
+					
+					// Clear var.
+						_.vars.lock = null;
+					
+					// Clear cookie.
+						document.cookie =	_.lcn + '=' +
+											(_.config.lock.path ? ';path=' + _.config.lock.path : '') +
+											';expires=Thu, 01 Jan 1970 01:02:03 GMT';
+
+						console.log('[skel] unlocking');
+
+					// Reload.
+						window.location.reload();
+
+				},
 				
 				/**
 				 * If provided an object, return the value of the first key that matches an active breakpoint. Otherwise, just return the argument.
@@ -524,7 +592,7 @@ var skel = (function() {
 					return (_.indexOf(_.vars.lastStateId, _.sd + k) !== -1);
 
 				},
-				
+
 			/* Row Operations */
 
 				/**
@@ -1091,6 +1159,29 @@ var skel = (function() {
 									// Exact content provided? Use it.
 										if (state.config.viewport.content)
 											s1 = state.config.viewport.content;
+									// Lock in effect?
+										else if (_.locked()) {
+
+											// Scalable.
+												a.push('user-scalable=yes');
+
+											// Width.
+												if (_.vars.lock[0])
+													a.push('width=' + _.vars.lock[0]);
+												
+											// Height.
+												if (_.vars.lock[1])
+													a.push('height=' + _.vars.lock[1]);
+											
+											s1 = a.join(',');
+											
+											// Force a quick poll in case we didn't catch the locked width and/or height
+											// the first time around.
+												window.setTimeout(function() {
+													_.poll();
+												}, 0);
+											
+										}
 									// Otherwise, parse individual options.
 										else {
 
@@ -1113,7 +1204,7 @@ var skel = (function() {
 											s1 = a.join(',');
 											
 										}
-
+										
 									// Get element
 										if (!(x = _.getCachedElement(id)))
 											x = _.cacheNewElement(
@@ -1790,6 +1881,23 @@ var skel = (function() {
 						
 						// isMobile.
 							_.vars.isMobile = (_.vars.deviceType == 'wp' || _.vars.deviceType == 'android' || _.vars.deviceType == 'ios');
+						
+						// Lock.
+							x = document.cookie.split(';');
+							
+							_.iterate(x, function(i) {
+							
+								var y = x[i].split('=');
+								
+								if (y[0].replace(/^\s+|\s+$/g, '') == _.lcn
+								&&	y[1].length > 0) {
+									
+									_.vars.lock = y[1].split('_');
+									return;
+								
+								}
+							
+							});
 						
 				},			
 				
