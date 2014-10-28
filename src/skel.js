@@ -69,7 +69,7 @@ var skel = (function() {
 							
 								// Media query ('' = always activate this breakpoint).
 									media: ''
-									
+
 							}
 
 					},
@@ -114,9 +114,17 @@ var skel = (function() {
 					RTL: false,
 					
 				// Viewport.
-				// Note: This is *only* applied to the placeholder breakpoint (which itself is only activated in static mode).
 					viewport: {
-						width: 'device-width'
+						
+						// Width.
+							width: 'device-width',
+							
+						// Height.
+							height: 'device-height',
+							
+						// Scalable?
+							scalable: true
+
 					}
 					
 			},
@@ -1086,22 +1094,24 @@ var skel = (function() {
 									// Otherwise, parse individual options.
 										else {
 
-											// Not scalable?
-												if (state.config.viewport.scalable === false)
-													a.push('user-scalable=no');
-											// We *probably* don't need this, but just in case ...
-												else
-													a.push('user-scalable=yes');
+											// Scalable.
+												a.push('user-scalable=' + (state.config.viewport.scalable ? 'yes' : 'no'));
 											
-											// Explicit width?
+											// Width.
 												if (state.config.viewport.width)
 													a.push('width=' + state.config.viewport.width);
-											// Fixes weird zooming issues.
-												else
+
+											// Height.
+												if (state.config.viewport.height)
+													a.push('height=' + state.config.viewport.height);
+											
+											// Set initial scale if we're using device-width and device-height.
+												if (state.config.viewport.width == 'device-width'
+												&&	state.config.viewport.height == 'device-height')
 													a.push('initial-scale=1');
 											
 											s1 = a.join(',');
-										
+											
 										}
 
 									// Get element
@@ -1790,6 +1800,21 @@ var skel = (function() {
 
 					var fArgs = [], preloads = [];
 
+					// If no config is provided, or if one is provided without any breakpoints defined,
+					// switch to static mode.
+						if (!config
+						||	!('breakpoints' in config)) {
+							
+							_.isStatic = true;
+						
+							// Override viewport defaults. Prevents "width=device-width" and "height=device-height"
+							// from being applied to the viewport (neither of which are needed in static mode).
+								_.config.viewport.width = '';
+								_.config.viewport.height = '';
+								_.config.viewport.scalable = true;
+
+						}
+
 					// Set up config.
 
 						// Check for a valid user config.
@@ -1812,11 +1837,22 @@ var skel = (function() {
 								&&	!_.isArray(_.config.grid.gutters))
 									_.config.grid.gutters = [_.config.grid.gutters, _.config.grid.gutters];
 							
-							// Extend base breakpoint config's grid by config's grid.
-								_.extend(_.defaults.config_breakpoint.grid, _.config.grid);
+							// Extend base breakpoint config.
+								_.extend(
+									_.defaults.config_breakpoint.grid,
+									_.config.grid
+								);
 
 							// Update maxGridZoom.
 								_.maxGridZoom = Math.max(_.maxGridZoom, _.config.grid.zoom);
+
+						// Viewport config.
+
+							// Extend base breakpoint config.
+								_.extend(
+									_.defaults.config_breakpoint.viewport,
+									_.config.viewport
+								);
 													
 						// Set base breakpoint config's containers to config's containers.
 							_.defaults.config_breakpoint.containers = _.config.containers;
@@ -1867,7 +1903,7 @@ var skel = (function() {
 										
 									}
 
-								// grid
+								// grid.
 									if ('grid' in c) {
 										
 										// Gutters.
@@ -1902,16 +1938,6 @@ var skel = (function() {
 								_.breakpointList.push(id);
 
 						});
-
-						// If the placeholder breakpoint is still around, enable static (non-responsive) mode.
-							if ('*' in _.config.breakpoints) {
-								
-								_.isStatic = true;
-								
-								// Copy config's viewport to the placeholder breakpoint's viewport.
-									_.config.breakpoints['*'].viewport = _.config.viewport;
-								
-							}
 						
 					// Process events config.
 						_.iterate(_.config.events, function(k) {
@@ -1947,7 +1973,7 @@ var skel = (function() {
 
 					var a = [];
 					
-					// ELEMENT: Viewport META tag.
+					// ELEMENT: Initial viewport META tag.
 						
 						a.push(_.newElement(
 							'mV',
@@ -2288,7 +2314,7 @@ var skel = (function() {
 							_.registerLocation('body', document.getElementsByTagName('body')[0]);
 						});
 
-					// IE viewport fix.
+					// Hack: IE viewport fix.
 						if (_.vars.IEVersion >= 10)
 							_.attachElement(_.newElement(
 								'msie-viewport-fix',
