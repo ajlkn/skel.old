@@ -101,12 +101,12 @@ var skel = (function() {
 				// Lock.
 					lock: {
 						
-						// If true, makes the lock permanent. If false, clears lock at the end of client's session.
-							permanent: true,
-						
 						// Path to which the lock applies (false = current path only, '/' = sitewide).
-							path: false
+							path: false,
 					
+						// If true, makes the lock permanent. If false, clears lock at the end of client's session.
+							permanent: true
+						
 					},
 				
 				// Plugins.
@@ -506,6 +506,15 @@ var skel = (function() {
 				},
 
 				/**
+				 * Determines if a lock is in effect.
+				 */
+				isLocked: function() {
+					
+					return (!!_.vars.lock && _.isArray(_.vars.lock));
+				
+				},
+
+				/**
 				 * Locks the viewport to a specific width and/or height and reloads the page.
 				 * @param {integer} w Width.
 				 * @param {integer} h Height.
@@ -527,15 +536,6 @@ var skel = (function() {
 
 				},
 				
-				/**
-				 * Determines if a lock is in effect.
-				 */
-				locked: function() {
-					
-					return (!!_.vars.lock && _.isArray(_.vars.lock));
-				
-				},
-
 				/**
 				 * Removes a previously set viewport lock and reloads the page.
 				 */
@@ -667,7 +667,7 @@ var skel = (function() {
 											if (!mode)
 												return;
 										
-										// Find current front (which will serve as our placeholder for when we need to move this cell back).
+										// Get placeholder node (which will serve as our point of reference for when this cell needs to move back).
 											k = (_.config.RTL ? 'nextSibling' : 'previousSibling');
 
 											placeholder = cell[k];
@@ -707,7 +707,7 @@ var skel = (function() {
 											||	mode == 'z' && cell[key].zoom <= state.config.grid.zoom)
 												return;
 
-										// Move cell back to original location (using our placeholder as a point of reference).
+										// Move cell back to its original location (using our placeholder).
 											console.log('[skel] important: moving back (' + i + ')');
 											
 											parent.insertBefore(
@@ -715,7 +715,7 @@ var skel = (function() {
 												(_.config.RTL && mode == 'z') ? placeholder.previousSibling : placeholder.nextSibling
 											);
 
-										// Clear placeholder property on cell.
+										// Unmark cell as moved.
 											cell[key] = false;
 
 									}
@@ -1174,15 +1174,17 @@ var skel = (function() {
 							// 3.3. Add state-dependent elements.
 
 								// ELEMENT: Viewport <meta> tag.
-									a = [];
-									
+
 									id = 'mV' + _.stateId;
 									
-									// Exact content provided? Use it.
+									// 'content' property set? Use it.
 										if (state.config.viewport.content)
 											s1 = state.config.viewport.content;
+									
 									// Lock in effect?
-										else if (_.locked()) {
+										else if (_.isLocked()) {
+
+											a = [];
 
 											// Scalable.
 												a.push('user-scalable=yes');
@@ -1204,8 +1206,11 @@ var skel = (function() {
 												}, 0);
 											
 										}
+									
 									// Otherwise, parse individual options.
 										else {
+
+											a = [];
 
 											// Scalable.
 												a.push('user-scalable=' + (state.config.viewport.scalable ? 'yes' : 'no'));
@@ -1360,10 +1365,12 @@ var skel = (function() {
 								// ELEMENT: (CSS) Grid / Zoom.
 								
 									id = 'gZ' + _.stateId;
-									s1 = '';
 									
-									for (i=1; i <= state.config.grid.zoom; i++)
-										s1 += _.css.gc('\\28 ' + i + '\\29');
+									// Generate CSS.
+										s1 = '';
+
+										for (i=1; i <= state.config.grid.zoom; i++)
+											s1 += _.css.gc('\\28 ' + i + '\\29');
 								
 									// Build Element.
 										x = _.cacheNewElement(
@@ -1582,7 +1589,7 @@ var skel = (function() {
 				},
 				
 				/**
-				 * Forces a state update. Typically called after the cache has been modified by something other than skel (like a plugin).
+				 * Forces a state update. Typically called after the cache has been modified by something other than Skel (like a plugin).
 				 */
 				updateState: function() {
 
