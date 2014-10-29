@@ -269,6 +269,13 @@
 
 	/* Collapse */
 	/*
+		.container {
+			// width: (containers) !important //
+			width: 1140px !important;
+			max-width: none !important;
+			min-width: 0 !important;
+		}
+
 		.row:not(.no-collapse) > * {
 			width: 100% !important;
 			margin-left: 0 !important;

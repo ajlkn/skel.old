@@ -1364,23 +1364,27 @@ var skel = (function() {
 
 								// ELEMENT: (CSS) Grid / Zoom.
 								
-									id = 'gZ' + _.stateId;
-									
-									// Generate CSS.
-										s1 = '';
+									id = 'igZ' + state.config.grid.zoom;
 
-										for (i=1; i <= state.config.grid.zoom; i++)
-											s1 += _.css.gc('\\28 ' + i + '\\29');
-								
-									// Build Element.
-										x = _.cacheNewElement(
-											id,
-											_.newInline(
-												s1
-											),
-											'head', 
-											3
-										);
+									if (!(x = _.getCachedElement(id))) {
+
+										// Generate CSS.
+											s1 = '';
+
+											for (i=1; i <= state.config.grid.zoom; i++)
+												s1 += _.css.gc('\\28 ' + i + '\\29');
+									
+										// Build Element.
+											x = _.cacheNewElement(
+												id,
+												_.newInline(
+													s1
+												),
+												'head', 
+												3
+											);
+
+									}
 
 									// Push to state.
 										console.log('[skel] -- ' + id);
@@ -1390,20 +1394,29 @@ var skel = (function() {
 
 									if (state.config.grid.collapse) {
 
-										id = 'gC' + _.stateId;
+										id = 'igC' + state.config.containers;
+
+										if (!(x = _.getCachedElement(id))) {
+
+											// Build Element.
+												x = _.cacheNewElement(
+													id,
+													_.newInline(
+														'.container{' +
+														'width:' + state.config.containers + '!important;' +
+														'max-width:none!important;' +
+														'min-width:0!important' +
+														'}' +
+														'.row:not(.no-collapse)>*{' +
+															'width:100%!important;' +
+															'margin-left:0!important' +
+														'}'
+													),
+													'head', 
+													3
+												);
 										
-										// Build Element.
-											x = _.cacheNewElement(
-												id,
-												_.newInline(
-													'.row:not(.no-collapse)>*{' +
-														'width:100%!important;' +
-														'margin-left:0!important' +
-													'}'
-												),
-												'head', 
-												3
-											);
+										}
 
 										// Push to state.
 											console.log('[skel] -- ' + id);
