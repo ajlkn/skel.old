@@ -602,99 +602,121 @@ var skel = (function() {
 
 					// RTL: Performs a few adjustments to get things working nicely on RTL.
 						if (_.config.RTL) {
-							
-							_.unreverseRows();
 
-							if (state.config.grid.collapse)
-								_.reverseRows();
+							// Unreverse all rows.
+								_.unreverseRows();
+
+							// Collapse enabled? Reverse rows.
+								if (state.config.grid.collapse)
+									_.reverseRows();
 						
 						}
 
-					// Important: Shifts cells marked as "important" to the top of their respective rows.
-						var m = '_skel_important',
-							i, x = [], ee;
+					// Shifts cells marked as "important" to the front of their respective rows.
+						var key = '_skel_important', cells = [],
+							i, a;
 
-						// Zoom.
-							for (i=1; i <= _.maxGridZoom; i++) {
-								
-								ee = _.getElementsByClassName('important(' + i + ') ');
-								
-								_.iterate(ee, function(k) {
-									x.push(ee[k]);
-								});
-								
-							}
-
-						// Collapse.
-							ee = _.getElementsByClassName('important(collapse) ');
+						// Get "important" cells.
 							
-							_.iterate(ee, function(k) {
-								x.push(ee[k]);
-							});
-						
-						if (x && x.length > 0)
-							_.iterate(x, function(i) {
+							// Via zoom.
+								for (i=1; i <= _.maxGridZoom; i++) {
+									
+									a = _.getElementsByClassName('important(' + i + ')');
+									
+									_.iterate(a, function(k) {
+										cells.push(a[k]);
+									});
+									
+								}
 
-								if (i === 'length')
-									return;
+							// Via collapse.
+								a = _.getElementsByClassName('important(collapse)');
 								
-								var e = x[i], p = e.parentNode,
-									k;
+								_.iterate(a, function(k) {
+									cells.push(a[k]);
+								});
+						
+						// Step through cells.
+							_.iterate(cells, function(i) {
+
+								// Just in case.
+									if (i === 'length')
+										return;
+								
+								var cell = cells[i], parent = cell.parentNode,
+									placeholder, mode = false, k, z;
 								
 								// No parent? Bail.
-									if (!p)
+									if (!parent)
 										return;
-
-								// Meets move conditions? Proceed to move cell.
-									if ((e.className.match(/important\(collapse\)/) && state.config.grid.collapse)
-									|| (e.className.match(/important\(([0-9])\)/) && (parseInt(RegExp.$1) <= state.config.grid.zoom))) {
+									
+								// Not moved? Move it.
+									if (!cell.hasOwnProperty(key) || cell[key] === false) {
 										
-										// If we're already collapsed, bail.
-											if (e.hasOwnProperty(m) && e[m] !== false)
+										// Determine mode.
+											
+											// Collapse?
+												if (state.config.grid.collapse && cell.className.match(/important\(collapse\)/))
+													mode = 'c';
+												
+											// Zoom?
+												else if (cell.className.match(/important\(([0-9])\)/) && (z = parseInt(RegExp.$1)) <= state.config.grid.zoom)
+													mode = 'z';
+										
+										// No valid mode? Bail.
+											if (!mode)
 												return;
 										
-										// Get sibling.
+										// Find current front (which will serve as our placeholder for when we need to move this cell back).
 											k = (_.config.RTL ? 'nextSibling' : 'previousSibling');
 
-											p = e[k];
+											placeholder = cell[k];
 											
-											while ( p && p.nodeName == '#text' )
-												p = p[k];
+											while ( placeholder && placeholder.nodeName == '#text' )
+												placeholder = placeholder[k];
 											
-										// No previous sibling? Bail, because we're already at the top of the row.
-											if (!p)
-												return;
+											// Couldn't find anything? Means this cell's already at the front, so bail.
+												if (!placeholder)
+													return;
 
-										// Move cell to top.
-											console.log('[skel] important: moving to top of row (' + i + ')');
-											e.parentNode.insertBefore(e, e.parentNode.firstChild);
+										// Move cell to front.
+											console.log('[skel] important: moving to front of row (' + i + ')');
 											
-										// Set placeholder property on cell.
-											e[m] = p;
+											parent.insertBefore(
+												cell,
+												(_.config.RTL && mode == 'z') ? parent.lastChild : parent.firstChild
+											);
+											
+										// Mark cell as moved.
+											cell[key] = {
+												placeholder: placeholder,
+												mode: mode,
+												zoom: z
+											};
 
 									}
-								// Otherwise, undo the move (if one was performed previously).
+								
+								// Moved already?
 									else {
 										
-										// If the cell hasn't been moved before it won't have a placeholder, so just set it to false.
-											if (!e.hasOwnProperty(m))
-												e[m] = false;
-
-										// Get placeholder.
-											p = e[m];
+										placeholder = cell[key].placeholder;
+										mode = cell[key].mode;
 										
-										// If it's not false, move cell back.
-											if (p !== false) {
-												
-												console.log('[skel] important: moving back (' + i + ')');
+										// Cell doesn't need to move? Bail.
+											if (mode == 'c' && state.config.grid.collapse
+											||	mode == 'z' && cell[key].zoom <= state.config.grid.zoom)
+												return;
 
-												// Move e after placeholder.
-													e.parentNode.insertBefore(e, p.nextSibling);
-
-												// Clear placeholder property on cell.
-													e[m] = false;
+										// Move cell back to original location (using our placeholder as a point of reference).
+											console.log('[skel] important: moving back (' + i + ')');
 											
-											}
+											parent.insertBefore(
+												cell,
+												(_.config.RTL && mode == 'z') ? placeholder.previousSibling : placeholder.nextSibling
+											);
+
+										// Clear placeholder property on cell.
+											cell[key] = false;
 
 									}
 							
@@ -716,7 +738,7 @@ var skel = (function() {
 
 						var	row = x[i];
 
-						// If the row has already been reversed, or it falls below a given no-collapse level, bail.
+						// If the row has already been reversed, bail.
 							if (row._skel_isReversed)
 								return;
 						
