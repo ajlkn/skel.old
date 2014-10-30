@@ -1250,10 +1250,10 @@ var skel = (function() {
 
 								// ELEMENT: (CSS) Containers.
 									
-									var C, Cu;
+									var C, Cu, CLocked = false;
 										
 									// Determine width, units, and id.
-										
+
 										// Split "containers" into width and units.
 											a = _.parseMeasurement(state.config.containers);
 											C = a[0];
@@ -1261,10 +1261,18 @@ var skel = (function() {
 
 										// Set "containers" state value (needed for later).
 											state.values.containers = C + Cu;
-									
+
 										// Set id.
 											id = 'iC' + state.values.containers;
+
+										// Locked?
+											if (Cu.substr(-1) == '!') {
+
+												CLocked = true;
+												Cu = Cu.substr(0, Cu.length - 1);
 											
+											}
+
 									// Get element.
 										if (!(x = _.getCachedElement(id))) {
 											
@@ -1273,11 +1281,21 @@ var skel = (function() {
 													id,
 													_.newInline(
 														'body{min-width:' + C +'}' +
-														'.container{margin-left:auto;margin-right:auto;width:' + (C*1)+Cu + '}' +
-														'.container.\\31 25\\25{width:100%;max-width:' + (C*1.25)+Cu + ';min-width:' + C + '}' +
-														'.container.\\37 5\\25{width:' + (C*0.75)+Cu + '}' +
-														'.container.\\35 0\\25{width:' + (C*0.5)+Cu + '}' +
-														'.container.\\32 5\\25{width:' + (C*0.25)+Cu + '}'
+														'.container{margin-left:auto;margin-right:auto;width:' + (C*1)+Cu +
+														(
+															CLocked
+															?
+																'!important;' +
+																'max-width:none!important;' +
+																'min-width:0!important' +
+																'}'
+															:
+																'}' +
+																'.container.\\31 25\\25{width:100%;max-width:' + (C*1.25)+Cu + ';min-width:' + C + '}' +
+																'.container.\\37 5\\25{width:' + (C*0.75)+Cu + '}' +
+																'.container.\\35 0\\25{width:' + (C*0.5)+Cu + '}' +
+																'.container.\\32 5\\25{width:' + (C*0.25)+Cu + '}'
+														)
 													),
 													'head',
 													3
