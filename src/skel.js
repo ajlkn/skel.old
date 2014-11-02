@@ -1420,11 +1420,6 @@ var skel = (function() {
 												x = _.cacheNewElement(
 													id,
 													_.newInline(
-														'.container{' +
-														'width:' + state.config.containers + '!important;' +
-														'max-width:none!important;' +
-														'min-width:0!important' +
-														'}' +
 														'.row:not(.no-collapse)>*{' +
 															'width:100%!important;' +
 															'margin-left:0!important' +
