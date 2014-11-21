@@ -131,7 +131,7 @@ var skel = (function() {
 							width: 'device-width',
 							
 						// Height.
-							height: 'device-height',
+							height: '',
 							
 						// Scalable?
 							scalable: true
@@ -1223,9 +1223,8 @@ var skel = (function() {
 												if (state.config.viewport.height)
 													a.push('height=' + state.config.viewport.height);
 											
-											// Set initial scale if we're using device-width and device-height.
-												if (state.config.viewport.width == 'device-width'
-												&&	state.config.viewport.height == 'device-height')
+											// Set initial scale if we're using device-width.
+												if (state.config.viewport.width == 'device-width')
 													a.push('initial-scale=1');
 											
 											s1 = a.join(',');
