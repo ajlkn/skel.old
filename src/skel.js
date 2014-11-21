@@ -2477,10 +2477,11 @@ var skel = (function() {
 						});
 
 					// Hack: IE viewport fix.
-						if (_.vars.IEVersion >= 10)
+						if (_.vars.browser == 'ie'
+						&&	_.vars.IEVersion >= 10)
 							_.attachElement(_.newElement(
 								'msie-viewport-fix',
-								_.newInline('@-ms-viewport{width:device-width;}'),
+								_.newInline('@-ms-viewport{width:device-width}'),
 								'^head', 
 								1
 							));
