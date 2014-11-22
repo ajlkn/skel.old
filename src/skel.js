@@ -2188,7 +2188,6 @@ var skel = (function() {
 						a.push(_.newElement(
 							'iG', 
 							_.newInline(
-								'.row{border-bottom:solid 1px transparent}' +
 								'.row>*{float:left}' +
 								'.row:after,.row:before{content:"";display:block;clear:both;height:0}' +
 								'.row.uniform>*>:first-child{margin-top:0}' +
