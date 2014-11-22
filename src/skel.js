@@ -1279,7 +1279,6 @@ var skel = (function() {
 												x = _.cacheNewElement(
 													id,
 													_.newInline(
-														'body{min-width:' + (C*1)+Cu +'}' +
 														'.container{margin-left:auto;margin-right:auto;width:' + (C*1)+Cu +
 														(
 															CLocked
