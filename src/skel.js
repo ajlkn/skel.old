@@ -2517,3 +2517,20 @@ var skel = (function() {
 			return _;
 
 })();
+
+// UMD Wrapper (by @nason, based on github.com/umdjs/umd/blob/master/returnExports.js)
+(function (root, factory) {
+
+	// AMD.
+		if (typeof define === 'function' && define.amd)
+			define([], factory);
+
+	// Node.
+		else if (typeof exports === 'object')
+			module.exports = factory();
+
+	// Browser global.
+		else
+			root.skel = factory();
+
+}(this, function() { return skel; }));
