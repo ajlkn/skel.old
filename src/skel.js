@@ -159,18 +159,18 @@ var skel = (function() {
 				
 				// Grid cells.
 					gc: function(x) {
-						return	'.\\31 2u'+x+',.\\31 2u\\24'+x+'{width:100%;clear:none}' + 
-								'.\\31 1u'+x+',.\\31 1u\\24'+x+'{width:91.6666666667%;clear:none}' + 
-								'.\\31 0u'+x+',.\\31 0u\\24'+x+'{width:83.3333333333%;clear:none}' + 
-								'.\\39 u'+x+',.\\39 u\\24'+x+'{width:75%;clear:none}' + 
-								'.\\38 u'+x+',.\\38 u\\24'+x+'{width:66.6666666667%;clear:none}' + 
-								'.\\37 u'+x+',.\\37 u\\24'+x+'{width:58.3333333333%;clear:none}' + 
-								'.\\36 u'+x+',.\\36 u\\24'+x+'{width:50%;clear:none}' + 
-								'.\\35 u'+x+',.\\35 u\\24'+x+'{width:41.6666666667%;clear:none}' + 
-								'.\\34 u'+x+',.\\34 u\\24'+x+'{width:33.3333333333%; clear: none}' +
-								'.\\33 u'+x+',.\\33 u\\24'+x+'{width:25%;clear:none}' + 
-								'.\\32 u'+x+',.\\32 u\\24'+x+'{width:16.6666666667%;clear:none}' + 
-								'.\\31 u'+x+',.\\31 u\\24'+x+'{width:8.3333333333%;clear:none}' + 
+						return	'.\\31 2u'+x+',.\\31 2u\\24'+x+'{width:100%;clear:none;margin-left:0}' +
+								'.\\31 1u'+x+',.\\31 1u\\24'+x+'{width:91.6666666667%;clear:none;margin-left:0}' +
+								'.\\31 0u'+x+',.\\31 0u\\24'+x+'{width:83.3333333333%;clear:none;margin-left:0}' +
+								'.\\39 u'+x+',.\\39 u\\24'+x+'{width:75%;clear:none;margin-left:0}' +
+								'.\\38 u'+x+',.\\38 u\\24'+x+'{width:66.6666666667%;clear:none;margin-left:0}' +
+								'.\\37 u'+x+',.\\37 u\\24'+x+'{width:58.3333333333%;clear:none;margin-left:0}' +
+								'.\\36 u'+x+',.\\36 u\\24'+x+'{width:50%;clear:none;margin-left:0}' +
+								'.\\35 u'+x+',.\\35 u\\24'+x+'{width:41.6666666667%;clear:none;margin-left:0}' +
+								'.\\34 u'+x+',.\\34 u\\24'+x+'{width:33.3333333333%;clear:none;margin-left:0}' +
+								'.\\33 u'+x+',.\\33 u\\24'+x+'{width:25%;clear:none;margin-left:0}' +
+								'.\\32 u'+x+',.\\32 u\\24'+x+'{width:16.6666666667%;clear:none;margin-left:0}' +
+								'.\\31 u'+x+',.\\31 u\\24'+x+'{width:8.3333333333%;clear:none;margin-left:0}' +
 								'.\\31 2u\\24'+x+'+*,' +
 								'.\\31 1u\\24'+x+'+*,' +
 								'.\\31 0u\\24'+x+'+*,' +
@@ -181,21 +181,21 @@ var skel = (function() {
 								'.\\35 u\\24'+x+'+*,' +
 								'.\\34 u\\24'+x+'+*,' +
 								'.\\33 u\\24'+x+'+*,' +
-								'.\\32 u\\24'+x+'+*' +
+								'.\\32 u\\24'+x+'+*,' +
 								'.\\31 u\\24'+x+'+*{' +
 									'clear:left;' +
 								'}' +
-								'.\\-11u{margin-left:91.6666666667%}' +
-								'.\\-10u{margin-left:83.3333333333%}' +
-								'.\\-9u{margin-left:75%}' +
-								'.\\-8u{margin-left:66.6666666667%}' +
-								'.\\-7u{margin-left:58.3333333333%}' +
-								'.\\-6u{margin-left:50%}' +
-								'.\\-5u{margin-left:41.6666666667%}' +
-								'.\\-4u{margin-left:33.3333333333%}' +
-								'.\\-3u{margin-left:25%}' +
-								'.\\-2u{margin-left:16.6666666667%}' +
-								'.\\-1u{margin-left:8.3333333333%}';
+								'.\\-11u'+x+'{margin-left:91.6666666667%}' +
+								'.\\-10u'+x+'{margin-left:83.3333333333%}' +
+								'.\\-9u'+x+'{margin-left:75%}' +
+								'.\\-8u'+x+'{margin-left:66.6666666667%}' +
+								'.\\-7u'+x+'{margin-left:58.3333333333%}' +
+								'.\\-6u'+x+'{margin-left:50%}' +
+								'.\\-5u'+x+'{margin-left:41.6666666667%}' +
+								'.\\-4u'+x+'{margin-left:33.3333333333%}' +
+								'.\\-3u'+x+'{margin-left:25%}' +
+								'.\\-2u'+x+'{margin-left:16.6666666667%}' +
+								'.\\-1u'+x+'{margin-left:8.3333333333%}'
 
 					}
 				
