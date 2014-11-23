@@ -8,6 +8,7 @@
 		DOMReady method (github.com/ded/domready | (c) Dustin Diaz 2014 | MIT license)
 		matchMedia() polyfill (github.com/paulirish/matchMedia.js | (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas, David Knight | Dual MIT/BSD license)
 		Normalize (git.io/normalize | Nicolas Gallagher, Jonathan Neal | MIT License)
+		UMD Wrapper (github.com/umdjs/umd/blob/master/returnExports.js | @umdjs + @nason)
 
 */
 
@@ -2518,7 +2519,7 @@ var skel = (function() {
 
 })();
 
-// UMD Wrapper (by @nason, based on github.com/umdjs/umd/blob/master/returnExports.js)
+// UMD Wrapper (github.com/umdjs/umd/blob/master/returnExports.js | @umdjs + @nason)
 (function (root, factory) {
 
 	// AMD.
