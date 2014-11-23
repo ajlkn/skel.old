@@ -2520,7 +2520,7 @@ var skel = (function() {
 })();
 
 // UMD Wrapper (github.com/umdjs/umd/blob/master/returnExports.js | @umdjs + @nason)
-(function (root, factory) {
+(function(root, factory) {
 
 	// AMD.
 		if (typeof define === 'function' && define.amd)
