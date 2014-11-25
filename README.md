@@ -12,6 +12,7 @@ Skel is a lightweight, low-level framework for building responsive sites and web
 * DOMReady method (http://github.com/ded/domready | (c) Dustin Diaz 2014 | MIT license)
 * matchMedia() polyfill (http://github.com/paulirish/matchMedia.js | (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas, David Knight | Dual MIT/BSD license)
 * Normalize (http://git.io/normalize | Nicolas Gallagher, Jonathan Neal | MIT License)
+* UMD Wrapper (http://github.com/umdjs/umd/blob/master/returnExports.js | @umdjs + @nason)
 
 ## License
 
