@@ -1,6 +1,6 @@
 {
 	"name": "skel",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"description": "A lightweight responsive framework for the www.", 
 	"keywords": [ "framework", "responsive", "grid", "skeljs" ],
 	"homepage": "http://getskel.com",

@@ -1,4 +1,4 @@
-/* skel.css v2.0.1 | (c) n33 | getskel.com | MIT licensed */
+/* skel.css v2.0.2 | (c) n33 | getskel.com | MIT licensed */
 
 /*
 
@@ -73,6 +73,10 @@
 
 /* Grid */
 
+	.row {
+		border-bottom: solid 1px transparent;
+	}
+
 	.row > * {
 		float: left;
 	}
@@ -102,8 +106,8 @@
 			}
 
 			.row {
-				/* margin: -(gutters.horizontal) 0 0 -(gutters.vertical) */
-				margin: 0 0 0 -40px;
+				/* margin: -(gutters.horizontal) 0 -1px -(gutters.vertical) */
+				margin: 0 0 -1px -40px;
 			}
 			
 			.row.uniform > * {
@@ -112,8 +116,8 @@
 			}
 
 			.row.uniform {
-				/* margin: -(gutters.vertical) 0 0 -(gutters.vertical) */
-				margin: -40px 0 0 -40px;
+				/* margin: -(gutters.vertical) 0 -1px -(gutters.vertical) */
+				margin: -40px 0 -1px -40px;
 			}
 			
 		/* 200% */
@@ -124,8 +128,8 @@
 			}
 
 			.row.\32 00\25 {
-				/* margin: -(gutters.horizontal) 0 0 -(gutters.vertical) */
-				margin: 0 0 0 -80px;
+				/* margin: -(gutters.horizontal) 0 -1px -(gutters.vertical) */
+				margin: 0 0 -1px -80px;
 			}
 
 			.row.uniform.\32 00\25 > * {
@@ -134,8 +138,8 @@
 			}
 
 			.row.uniform.\32 00\25 {
-				/* margin: -(gutters.vertical) 0 0 -(gutters.vertical) */
-				margin: -80px 0 0 -80px;
+				/* margin: -(gutters.vertical) 0 -1px -(gutters.vertical) */
+				margin: -80px 0 -1px -80px;
 			}
 
 		/* 150% */
@@ -146,8 +150,8 @@
 			}
 
 			.row.\31 50\25 {
-				/* margin: -(gutters.horizontal) 0 0 -(gutters.vertical) */
-				margin: 0 0 0 -60px;
+				/* margin: -(gutters.horizontal) 0 -1px -(gutters.vertical) */
+				margin: 0 0 -1px -60px;
 			}
 
 			.row.uniform.\31 50\25 > * {
@@ -156,8 +160,8 @@
 			}
 
 			.row.uniform.\31 50\25 {
-				/* margin: -(gutters.vertical) 0 0 -(gutters.vertical) */
-				margin: -60px 0 0 -60px;
+				/* margin: -(gutters.vertical) 0 -1px -(gutters.vertical) */
+				margin: -60px 0 -1px -60px;
 			}
 
 		/* 50% */
@@ -168,8 +172,8 @@
 			}
 
 			.row.\35 0\25 {
-				/* margin: -(gutters.horizontal) 0 0 -(gutters.vertical) */
-				margin: 0 0 0 -20px;
+				/* margin: -(gutters.horizontal) 0 -1px -(gutters.vertical) */
+				margin: 0 0 -1px -20px;
 			}
 
 			.row.uniform.\35 0\25 > * {
@@ -178,8 +182,8 @@
 			}
 
 			.row.uniform.\35 0\25 {
-				/* margin: -(gutters.vertical) 0 0 -(gutters.vertical) */
-				margin: -20px 0 0 -20px;
+				/* margin: -(gutters.vertical) 0 -1px -(gutters.vertical) */
+				margin: -20px 0 -1px -20px;
 			}
 
 		/* 25% */
@@ -190,8 +194,8 @@
 			}
 
 			.row.\32 5\25 {
-				/* margin: -(gutters.horizontal) 0 0 -(gutters.vertical) */
-				margin: 0 0 0 -10px;
+				/* margin: -(gutters.horizontal) 0 -1px -(gutters.vertical) */
+				margin: 0 0 -1px -10px;
 			}
 
 			.row.uniform.\32 5\25 > * {
@@ -200,20 +204,18 @@
 			}
 
 			.row.uniform.\32 5\25 {
-				/* margin: -(gutters.vertical) 0 0 -(gutters.vertical) */
-				margin: -10px 0 0 -10px;
+				/* margin: -(gutters.vertical) 0 -1px -(gutters.vertical) */
+				margin: -10px 0 -1px -10px;
 			}
 
 		/* 0% */
 		
 			.row.\30 \25 > * {
-				/* padding: (gutters.horizontal) 0 0 (gutters.vertical) */
 				padding: 0;
 			}
 
 			.row.\30 \25 {
-				/* margin: -(gutters.horizontal) 0 0 -(gutters.vertical) */
-				margin: 0;
+				margin: 0 0 -1px 0;
 			}
 
 	/* Cells */
