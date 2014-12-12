@@ -1130,6 +1130,70 @@ var skel = (function() {
 					};
 				},
 
+				/**
+				 * Removes a cache entry from a breakpoint.
+				 * @param {string} breakpointId Breakpoint ID.
+				 * @param {string} id ID.
+				 * @return {bool} True on success, false on failure.
+				 */
+				removeCachedElementFromBreakpoint: function(breakpointId, id) {
+
+					_.iterate(_.breakpoints[breakpointId].elements, function(k) {
+
+						if (_.breakpoints[breakpointId].elements[k].id == id) {
+
+							delete _.breakpoints[breakpointId].elements[k];
+							console.log('[skel] ' + id + ': removed from breakpoint (' + breakpointId + ')');
+
+						}
+
+					});
+
+					return true;
+
+				},
+
+				/**
+				 * Removes a cache entry from a state.
+				 * @param {string} stateId State ID.
+				 * @param {string} id ID.
+				 * @return {bool} True on success, false on failure.
+				 */
+				removeCachedElementFromState: function(stateId, id) {
+
+					_.iterate(_.cache.stateElements[stateId], function(k) {
+
+						if (_.cache.stateElements[stateId][k].id == id) {
+
+							delete _.cache.stateElements[stateId][k];
+							console.log('[skel] ' + id + ': removed from state (' + stateId + ')');
+
+						}
+
+					});
+
+					return true;
+
+				},
+
+				/**
+				 * Removes an element from the cache.
+				 * @param {string} id ID.
+				 * @return {bool} True on success, false on failure.
+				 */
+				uncacheElement: function(id) {
+
+					// Doesn't exist? Bail.
+						if (!(id in _.cache.elements))
+							return false;
+
+					// Remove from elements.
+						delete _.cache.elements[id];
+
+					return true;
+
+				},
+
 			/* Main */
 
 				/**
