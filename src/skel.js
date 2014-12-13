@@ -810,10 +810,19 @@ var skel = (function() {
 
 					_.events[name].push(f);
 
-					// Hack: If registering a 'change' event *after* skel's been initialized,
-					// manually call it right now.
-						if (name == 'change' && _.isInit)
-							(f)();
+					// If Skel's already been initialized and this is either a change or
+					// activate event, manually trigger it now.
+						if (_.isInit) {
+
+							// Change.
+								if (name == 'change')
+									(f)();
+
+							// Activate.
+								else if (name.charAt(0) == '+' && _.isActive(name.substring(1)))
+									(f)();
+
+						}
 
 				},
 
@@ -1621,6 +1630,29 @@ var skel = (function() {
 
 					// 8. Trigger change event.
 						_.trigger('change');
+
+					// 9. Trigger activate/deactivate events.
+						_.iterate(_.breakpoints, function(k) {
+
+							// Breakpoint is now active ...
+								if (_.isActive(k)) {
+
+									// ... and it wasn't active before? Trigger activate event.
+										if (!_.wasActive(k))
+											_.trigger('+' + k);
+
+								}
+
+							// Breakpoint is not active ...
+								else {
+
+									// ... but it was active before? Trigger deactivate event.
+										if (_.wasActive(k))
+											_.trigger('-' + k);
+
+								}
+
+						});
 
 				},
 
