@@ -1,4 +1,4 @@
-/* skel.js v2.1.0-dev | (c) n33 | getskel.com | MIT licensed */
+/* skel.js v2.1.0 | (c) n33 | getskel.com | MIT licensed */
 
 /*
 

@@ -1,4 +1,4 @@
-/* skel.css v2.0.2 | (c) n33 | getskel.com | MIT licensed */
+/* skel.css v2.1.0 | (c) n33 | getskel.com | MIT licensed */
 
 /*
 
@@ -29,7 +29,7 @@
 	.container {
 		margin-left: auto;
 		margin-right: auto;
-		
+
 		/* width: (containers) */
 		width: 1140px;
 	}
@@ -39,7 +39,7 @@
 		/* 125% */
 			.container.\31 25\25 {
 				width: 100%;
-				
+
 				/* max-width: (containers * 1.25) */
 				max-width: 1425px;
 
@@ -49,7 +49,7 @@
 
 		/* 75% */
 			.container.\37 5\25 {
-				
+
 				/* width: (containers * 0.75) */
 				width: 855px;
 
@@ -57,7 +57,7 @@
 
 		/* 50% */
 			.container.\35 0\25 {
-				
+
 				/* width: (containers * 0.50) */
 				width: 570px;
 
@@ -65,7 +65,7 @@
 
 		/* 25% */
 			.container.\32 5\25 {
-				
+
 				/* width: (containers * 0.25) */
 				width: 285px;
 
@@ -80,18 +80,18 @@
 	.row > * {
 		float: left;
 	}
-	
+
 	.row:after, .row:before {
 		content: '';
 		display: block;
 		clear: both;
 		height: 0;
 	}
-	
+
 	.row.uniform > * > :first-child {
 		margin-top: 0;
 	}
-	
+
 	.row.uniform > * > :last-child {
 		margin-bottom: 0;
 	}
@@ -99,7 +99,7 @@
 	/* Gutters */
 
 		/* Normal */
-		
+
 			.row > * {
 				/* padding: (gutters.horizontal) 0 0 (gutters.vertical) */
 				padding: 0 0 0 40px;
@@ -109,7 +109,7 @@
 				/* margin: -(gutters.horizontal) 0 -1px -(gutters.vertical) */
 				margin: 0 0 -1px -40px;
 			}
-			
+
 			.row.uniform > * {
 				/* padding: (gutters.vertical) 0 0 (gutters.vertical) */
 				padding: 40px 0 0 40px;
@@ -119,9 +119,9 @@
 				/* margin: -(gutters.vertical) 0 -1px -(gutters.vertical) */
 				margin: -40px 0 -1px -40px;
 			}
-			
+
 		/* 200% */
-		
+
 			.row.\32 00\25 > * {
 				/* padding: (gutters.horizontal) 0 0 (gutters.vertical) */
 				padding: 0 0 0 80px;
@@ -143,7 +143,7 @@
 			}
 
 		/* 150% */
-		
+
 			.row.\31 50\25 > * {
 				/* padding: (gutters.horizontal) 0 0 (gutters.vertical) */
 				padding: 0 0 0 60px;
@@ -165,7 +165,7 @@
 			}
 
 		/* 50% */
-		
+
 			.row.\35 0\25 > * {
 				/* padding: (gutters.horizontal) 0 0 (gutters.vertical) */
 				padding: 0 0 0 20px;
@@ -187,7 +187,7 @@
 			}
 
 		/* 25% */
-		
+
 			.row.\32 5\25 > * {
 				/* padding: (gutters.horizontal) 0 0 (gutters.vertical) */
 				padding: 0 0 0 10px;
@@ -209,7 +209,7 @@
 			}
 
 		/* 0% */
-		
+
 			.row.\30 \25 > * {
 				padding: 0;
 			}
@@ -247,7 +247,7 @@
 		.\31 u\24 + *,  .\31 u\24\28 1\29 + * {
 			clear: left;
 		}
-			
+
 		.\-11u, .\-11u\28 1\29 { margin-left: 91.6666666667% }
 		.\-10u, .\-10u\28 1\29 { margin-left: 83.3333333333% }
 		.\-9u, .\-9u\28 1\29 { margin-left: 75% }
