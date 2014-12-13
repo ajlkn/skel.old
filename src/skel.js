@@ -790,18 +790,27 @@ var skel = (function() {
 			/* Events */
 
 				/**
-				 * Binds an event.
+				 * Alias for on()
 				 * @param {string} name Name.
 				 * @param {function} f Function.
 				 */
 				bind: function(name, f) {
+					return _.on(name, f);
+				},
+
+				/**
+				 * Registers an event.
+				 * @param {string} name Name.
+				 * @param {function} f Function.
+				 */
+				on: function(name, f) {
 
 					if (!_.events[name])
 						_.events[name] = [];
 
 					_.events[name].push(f);
 
-					// Hack: If binding a 'change' event *after* skel's been initialized,
+					// Hack: If registering a 'change' event *after* skel's been initialized,
 					// manually call it right now.
 						if (name == 'change' && _.isInit)
 							(f)();
@@ -809,11 +818,11 @@ var skel = (function() {
 				},
 
 				/**
-				 * Shortcut to bind a "change" event.
+				 * Shortcut to register a "change" event.
 				 * @param {function} f Function.
 				 */
 				change: function(f) {
-					_.bind('change', f);
+					_.on('change', f);
 				},
 
 				/**
@@ -2167,7 +2176,7 @@ var skel = (function() {
 
 					// Process events config.
 						_.iterate(_.config.events, function(k) {
-							_.bind(k, _.config.events[k]);
+							_.on(k, _.config.events[k]);
 						});
 
 					// Handle stylesheet preloads if we have them (and we're not working locally).
@@ -2278,10 +2287,10 @@ var skel = (function() {
 						if (!_.config.pollOnce && !_.isStatic) {
 
 							// On resize.
-								_.bind('resize', function() { _.poll(); });
+								_.on('resize', function() { _.poll(); });
 
 							// On orientation change.
-								_.bind('orientationChange', function() { _.poll(); });
+								_.on('orientationChange', function() { _.poll(); });
 
 						}
 
@@ -2290,7 +2299,7 @@ var skel = (function() {
 
 							_.DOMReady(function() {
 
-								_.bind('orientationChange', function() {
+								_.on('orientationChange', function() {
 
 									// Get all inputs.
 										var inputs = document.getElementsByTagName('input');
@@ -2314,14 +2323,14 @@ var skel = (function() {
 
 						}
 
-					// Non-destructively bind skel events to window.
+					// Non-destructively register skel events to window.
 						if (window.onresize)
-							_.bind('resize', window.onresize);
+							_.on('resize', window.onresize);
 
 						window.onresize = function() { _.trigger('resize'); };
 
 						if (window.onorientationchange)
-							_.bind('orientationChange', window.onorientationchange);
+							_.on('orientationChange', window.onorientationchange);
 
 						window.onorientationchange = function() { _.trigger('orientationChange'); };
 
