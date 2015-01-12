@@ -474,9 +474,11 @@ var skel = (function() {
 					// Not a string? Just assume it's in px.
 						if (typeof x !== 'string')
 							a = [x,'px'];
+
 					// Fluid shortcut?
 						else if (x == 'fluid')
 							a = [100,'%'];
+
 					// Okay, hard way it is ...
 						else {
 
@@ -1739,6 +1741,7 @@ var skel = (function() {
 							// Static mode? Just change state.
 								if (_.isStatic)
 									_.changeState(newStateId);
+
 							// Otherwise, change state and apply <html> classes.
 								else {
 
