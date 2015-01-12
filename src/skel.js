@@ -1559,36 +1559,40 @@ var skel = (function() {
 
 								// ELEMENT: Conditionals.
 
-									id = 'iCd' + _.stateId;
+									if (!_.isStatic) {
 
-									if (!(x = _.getCachedElement(id))) {
+										id = 'iCd' + _.stateId;
 
-										s1 = [];
-										s2 = [];
+										if (!(x = _.getCachedElement(id))) {
 
-										// Get element.
-											_.iterate(_.breakpoints, function(k) {
+											s1 = [];
+											s2 = [];
 
-												if (_.indexOf(breakpointIds, k) !== -1)
-													s1.push('.not-' + k);
-												else
-													s2.push('.only-' + k);
+											// Get element.
+												_.iterate(_.breakpoints, function(k) {
 
-											});
+													if (_.indexOf(breakpointIds, k) !== -1)
+														s1.push('.not-' + k);
+													else
+														s2.push('.only-' + k);
 
-											var s = (s1.length > 0 ? s1.join(',') + '{display:none!important}' : '') + (s2.length > 0 ? s2.join(',') + '{display:none!important}' : '');
+												});
 
-											x = _.cacheNewElement(id,
-												_.newInline(
-													s.replace(/\.([0-9])/, '.\\3$1 ')
-												),
-												'head',
-												3
-											);
+												var s = (s1.length > 0 ? s1.join(',') + '{display:none!important}' : '') + (s2.length > 0 ? s2.join(',') + '{display:none!important}' : '');
 
-										// Push to state.
-											console.log('[skel] -- ' + id);
-											state.elements.push(x);
+												x = _.cacheNewElement(id,
+													_.newInline(
+														s.replace(/\.([0-9])/, '.\\3$1 ')
+													),
+													'head',
+													3
+												);
+
+											// Push to state.
+												console.log('[skel] -- ' + id);
+												state.elements.push(x);
+
+										}
 
 									}
 
@@ -2245,8 +2249,10 @@ var skel = (function() {
 
 						});
 
-					// If a grid zoom level greater than 1 has been explicitly defined, update map accordingly.
-						if (_.gridZoomMax > 1) {
+					// If a grid zoom level greater than 1 has been explicitly defined or we're in static mode,
+					// update map accordingly.
+						if (_.gridZoomMax > 1
+						||	_.isStatic) {
 
 							for (i=2; i <= _.gridZoomMax; i++)
 								_.gridZoomMap.k[i] = _.gridZoomMap.v[i] = i;
