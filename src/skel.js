@@ -1407,7 +1407,7 @@ var skel = (function() {
 																'}'
 															:
 																'}' +
-																'.container.\\31 25\\25{width:100%;max-width:' + (C*1.25)+Cu + ';min-width:' + C + '}' +
+																'.container.\\31 25\\25{width:100%;max-width:' + (C*1.25)+Cu + ';min-width:' + C+Cu + '}' +
 																'.container.\\37 5\\25{width:' + (C*0.75)+Cu + '}' +
 																'.container.\\35 0\\25{width:' + (C*0.5)+Cu + '}' +
 																'.container.\\32 5\\25{width:' + (C*0.25)+Cu + '}'
