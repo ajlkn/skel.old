@@ -257,6 +257,18 @@ var skel = (function() {
 			forceDefaultState: false,
 
 			/**
+			 * Grid zoom map.
+			 * @type object
+			 */
+			gridZoomMap: { k: {}, v: {} },
+
+			/**
+			 * Maximum grid zoom.
+			 * @type integer
+			 */
+			gridZoomMax: 1,
+
+			/**
 			 * Are we initialized?
 			 * @type {bool}
 			 */
@@ -294,12 +306,6 @@ var skel = (function() {
 			 * @type {string}
 			 */
 			lcn: '_skel_lock',
-
-			/**
-			 * Maximum grid zoom.
-			 * @type integer
-			 */
-			maxGridZoom: 1,
 
 			/**
 			 * My <script> element.
@@ -649,9 +655,9 @@ var skel = (function() {
 						// Get "important" cells.
 
 							// Via zoom.
-								for (i=1; i <= _.maxGridZoom; i++) {
+								for (i=1; i <= _.gridZoomMax; i++) {
 
-									a = _.getElementsByClassName('important(' + i + ')');
+									a = _.getElementsByClassName('important(' + _.gridZoomMap.k[i] + ')');
 
 									_.iterate(a, function(k) {
 										cells.push(a[k]);
@@ -690,7 +696,7 @@ var skel = (function() {
 													mode = 'c';
 
 											// Zoom?
-												else if (cell.className.match(/important\(([0-9])\)/) && (z = parseInt(RegExp.$1)) <= state.config.grid.zoom)
+												else if (cell.className.match(/important\((.+)\)/) && (z = parseInt(_.gridZoomMap.v[RegExp.$1])) <= state.config.grid.zoom)
 													mode = 'z';
 
 										// No valid mode? Bail.
@@ -1492,31 +1498,35 @@ var skel = (function() {
 
 								// ELEMENT: (CSS) Grid / Zoom.
 
-									id = 'igZ' + state.config.grid.zoom;
+									if (state.config.grid.zoom > 1) {
 
-									if (!(x = _.getCachedElement(id))) {
+										id = 'igZ' + state.config.grid.zoom;
 
-										// Generate CSS.
-											s1 = '';
+										if (!(x = _.getCachedElement(id))) {
 
-											for (i=1; i <= state.config.grid.zoom; i++)
-												s1 += _.css.gc('\\28 ' + i + '\\29');
+											// Generate CSS.
+												s1 = '';
 
-										// Build Element.
-											x = _.cacheNewElement(
-												id,
-												_.newInline(
-													s1
-												),
-												'head',
-												3
-											);
+												for (i=2; i <= state.config.grid.zoom; i++)
+														s1 += _.css.gc('\\28 ' + _.gridZoomMap.k[i] + '\\29');
+
+											// Build Element.
+												x = _.cacheNewElement(
+													id,
+													_.newInline(
+														s1
+													),
+													'head',
+													3
+												);
+
+										}
+
+										// Push to state.
+											console.log('[skel] -- ' + id);
+											state.elements.push(x);
 
 									}
-
-									// Push to state.
-										console.log('[skel] -- ' + id);
-										state.elements.push(x);
 
 								// ELEMENT: (CSS) Grid / Collapse.
 
@@ -2094,7 +2104,7 @@ var skel = (function() {
 				 */
 				initConfig: function(config) {
 
-					var fArgs = [], preloads = [];
+					var fArgs = [], preloads = [], i;
 
 					// If no config is provided, or if one is provided without any breakpoints defined,
 					// switch to static mode.
@@ -2139,8 +2149,8 @@ var skel = (function() {
 									_.config.grid
 								);
 
-							// Update maxGridZoom.
-								_.maxGridZoom = Math.max(_.maxGridZoom, _.config.grid.zoom);
+							// Update maximum grid zoom.
+								_.gridZoomMax = Math.max(_.gridZoomMax, _.config.grid.zoom);
 
 						// Viewport config.
 
@@ -2207,9 +2217,9 @@ var skel = (function() {
 											&&	!_.isArray(c.grid.gutters))
 												c.grid.gutters = [c.grid.gutters, c.grid.gutters];
 
-										// Update maxGridZoom.
+										// Update maximum grid zoom.
 											if ('zoom' in c.grid)
-												_.maxGridZoom = Math.max(_.maxGridZoom, c.grid.zoom);
+												_.gridZoomMax = Math.max(_.gridZoomMax, c.grid.zoom);
 
 									}
 
@@ -2234,6 +2244,37 @@ var skel = (function() {
 								_.breakpointList.push(id);
 
 						});
+
+					// If a grid zoom level greater than 1 has been explicitly defined, update map accordingly.
+						if (_.gridZoomMax > 1) {
+
+							for (i=2; i <= _.gridZoomMax; i++)
+								_.gridZoomMap.k[i] = _.gridZoomMap.v[i] = i;
+
+						}
+
+					// Otherwise, automatically assign zoom levels to each breakpoint.
+						else {
+
+							_.iterate(_.config.breakpoints, function(id) {
+
+								var c = _.config.breakpoints[id];
+
+								_.gridZoomMax++
+
+								if (!('grid' in c))
+									c.grid = {};
+
+								// Set zoom level.
+									c.grid.zoom = _.gridZoomMax;
+
+								// Update map (breakpoint ID => zoom level)
+									_.gridZoomMap.k[_.gridZoomMax] = id;
+									_.gridZoomMap.v[id] = _.gridZoomMax;
+
+							});
+
+						}
 
 					// Process events config.
 						_.iterate(_.config.events, function(k) {
