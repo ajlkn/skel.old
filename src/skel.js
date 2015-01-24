@@ -872,6 +872,14 @@ var skel = (function() {
 				},
 
 				/**
+				 * Shortcut to register a "ready" event.
+				 * @param {function} f Function.
+				 */
+				ready: function(f) {
+					_.on('ready', f);
+				},
+
+				/**
 				 * Triggers an event.
 				 * @param {string} name Name.
 				 */
@@ -2433,6 +2441,11 @@ var skel = (function() {
 							});
 
 						}
+
+					// Wrap "ready" event.
+						_.DOMReady(function() {
+							_.trigger('ready');
+						});
 
 					// Non-destructively register skel events to window.
 						if (window.onresize)
