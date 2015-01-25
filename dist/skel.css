@@ -1,4 +1,4 @@
-/* skel.css v2.2.0 | (c) n33 | getskel.com | MIT licensed */
+/* skel.css v2.2.1 | (c) n33 | getskel.com | MIT licensed */
 
 /*
 
@@ -260,7 +260,7 @@
 		.\-2u { margin-left: 16.6666666667% }
 		.\-1u { margin-left: 8.3333333333% }
 
-	/* Collapse */
+	/* (Deprecated) Collapse */
 	/*
 		.row:not(.no-collapse) > * {
 			width: 100% !important;
