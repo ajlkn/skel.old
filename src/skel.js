@@ -90,7 +90,7 @@ var skel = (function() {
 						// Responsive level.
 							level: 1,
 
-						// Sets collapse mode (false = don't collapse, true = collapse everything).
+						// (Deprecated) Sets collapse mode (false = don't collapse, true = collapse everything).
 							collapse: false,
 
 						// Size of [vertical, horizontal] gutters (N, 'Npx', 'Nem', etc).
@@ -460,6 +460,7 @@ var skel = (function() {
 							// Missing units? Assume it's in px.
 								if (tmp.length < 3 || !tmp[2])
 									a = [parseFloat(x),'px'];
+
 							// Otherwise, we have a winrar.
 								else
 									a = [parseFloat(tmp[1]),tmp[2]];
@@ -644,7 +645,7 @@ var skel = (function() {
 							// Unreverse all rows.
 								_.unreverseRows();
 
-							// Collapse enabled? Reverse rows.
+							// (Deprecated) Collapse enabled? Reverse rows.
 								if (state.config.grid.collapse)
 									_.reverseRows();
 
@@ -667,7 +668,7 @@ var skel = (function() {
 
 								}
 
-							// Via collapse.
+							// (Deprecated) Via collapse.
 								a = _.getElementsByClassName('important(collapse)');
 
 								_.iterate(a, function(k) {
@@ -693,7 +694,7 @@ var skel = (function() {
 
 										// Determine mode.
 
-											// Collapse?
+											// (Deprecated) Collapse?
 												if (state.config.grid.collapse && cell.className.match(/important\(collapse\)/))
 													mode = 'c';
 
@@ -956,6 +957,7 @@ var skel = (function() {
 								// If "me" is in <head>, insert x before "me".
 									if (this === _.me.parentNode)
 										this.insertBefore( x, _.me );
+
 								// Otherwise, just append it.
 									else
 										this.appendChild( x );
@@ -1579,7 +1581,7 @@ var skel = (function() {
 
 									}
 
-								// ELEMENT: (CSS) Grid / Collapse.
+								// (Deprecated) ELEMENT: (CSS) Grid / Collapse.
 
 									if (state.config.grid.collapse) {
 
@@ -2008,7 +2010,7 @@ var skel = (function() {
 
 					// Initializes plugins.
 
-						// If pluginConfig is provided as a second param to init() (deprecated) and it's
+						// (Deprecated) If pluginConfig is provided as a second param to init() and it's
 						// an object, copy it to config.plugins (where plugin configs are supposed to go).
 							if (pluginConfig
 							&&	typeof pluginConfig == 'object')
@@ -2238,8 +2240,7 @@ var skel = (function() {
 									if (!('media' in c))
 										c.media = _.defaults.config_breakpoint.media;
 
-								// range.
-								// Shortcut. Overrides 'media' if specified.
+								// (Deprecated) range.
 									if ('range' in c) {
 
 										s = c.range;
@@ -2527,6 +2528,7 @@ var skel = (function() {
 						// Wrap existing method if it exists.
 							if (document.getElementsByClassName)
 								_.getElementsByClassName = function(className) { return document.getElementsByClassName(className); }
+
 						// Otherwise, polyfill.
 							else
 								_.getElementsByClassName = function(className) { var d = document; if (d.querySelectorAll) return d.querySelectorAll(('.' + className.replace(' ', ' .')).replace(/\.([0-9])/, '.\\3$1 ')); else return []; }
@@ -2536,6 +2538,7 @@ var skel = (function() {
 						// Wrap existing method if it exists.
 							if (Array.prototype.indexOf)
 								_.indexOf = function(x,b) { return x.indexOf(b) };
+
 						// Otherwise, polyfill.
 							else
 								_.indexOf = function(x,b){if (typeof x=='string') return x.indexOf(b);var c,a=(b)?b:0,e;if(!this){throw new TypeError()}e=this.length;if(e===0||a>=e){return -1}if(a<0){a=e-Math.abs(a)}for(c=a;c<e;c++){if(this[c]===x){return c}}return -1};
@@ -2545,6 +2548,7 @@ var skel = (function() {
 						// Wrap existing method if it exists.
 							if (Array.isArray)
 								_.isArray = function(x) { return Array.isArray(x) };
+
 						// Otherwise, polyfill.
 							else
 								_.isArray = function(x) { return (Object.prototype.toString.call(x) === '[object Array]') };
@@ -2564,6 +2568,7 @@ var skel = (function() {
 										(f)(k[i]);
 
 								};
+
 						// Otherwise, fall back on hasOwnProperty (= slower, but works on older browsers).
 							else
 								_.iterate = function(a, f) {

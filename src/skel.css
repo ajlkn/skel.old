@@ -260,7 +260,7 @@
 		.\-2u { margin-left: 16.6666666667% }
 		.\-1u { margin-left: 8.3333333333% }
 
-	/* Collapse */
+	/* (Deprecated) Collapse */
 	/*
 		.row:not(.no-collapse) > * {
 			width: 100% !important;
