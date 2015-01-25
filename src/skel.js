@@ -851,8 +851,20 @@ var skel = (function() {
 						// Manually trigger event if applicable.
 							if (_.isInit) {
 
+								// Init.
+									if (name == 'init') {
+
+										// Trigger event.
+											(f)();
+
+										// This only gets called once, so there's no need to actually
+										// register it.
+											return;
+
+									}
+
 								// Change.
-									if (name == 'change') {
+									else if (name == 'change') {
 
 										// Trigger event.
 											(f)();
@@ -1999,6 +2011,9 @@ var skel = (function() {
 
 					// Mark as initialized.
 						_.isInit = true;
+
+					// Trigger init event.
+						_.trigger('init');
 
 				},
 
