@@ -836,30 +836,38 @@ var skel = (function() {
 				},
 
 				/**
-				 * Registers an event.
-				 * @param {string} name Name.
+				 * Registers one or more events.
+				 * @param {string} names Space-delimited list of event names.
 				 * @param {function} f Function.
 				 */
-				on: function(name, f) {
+				on: function(names, f) {
 
-					if (!_.events[name])
-						_.events[name] = [];
+					var a = names.split(/[\s]+/);
 
-					_.events[name].push(f);
+					_.iterate(a, function(i) {
 
-					// If Skel's already been initialized and this is either a change or
-					// activate event, manually trigger it now.
-						if (_.isInit) {
+						var name = a[i];
 
-							// Change.
-								if (name == 'change')
-									(f)();
+						if (!_.events[name])
+							_.events[name] = [];
 
-							// Activate.
-								else if (name.charAt(0) == '+' && _.isActive(name.substring(1)))
-									(f)();
+						_.events[name].push(f);
 
-						}
+						// If Skel's already been initialized and this is either a change or
+						// activate event, manually trigger it now.
+							if (_.isInit) {
+
+								// Change.
+									if (name == 'change')
+										(f)();
+
+								// Activate.
+									else if (name.charAt(0) == '+' && _.isActive(name.substring(1)))
+										(f)();
+
+							}
+
+					});
 
 				},
 
