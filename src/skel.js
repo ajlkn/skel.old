@@ -386,35 +386,6 @@ var skel = (function() {
 				matchesMedia: null,
 
 				/**
-				 * Temporary element for canUseProperty()
-				 * @type {DOMElement}
-				 */
-				canUseProperty_element: null,
-
-				/**
-				 * Determines if the browser supports a given property.
-				 * @param {string} p Property.
-				 * @return {bool} True if property is supported, false if not.
-				 */
-				canUseProperty: function(p) {
-
-					if (!_.canUseProperty_element)
-						_.canUseProperty_element = document.createElement('div');
-
-					var e = _.canUseProperty_element.style,
-						up = p.charAt(0).toUpperCase() + p.slice(1);
-
-					return	(
-								p in e
-							||	('Moz' + up) in e
-							||	('Webkit' + up) in e
-							||	('O' + up) in e
-							||	('ms' + up) in e
-					);
-
-				},
-
-				/**
 				 * Extends x by y.
 				 * @param {object} x Target object.
 				 * @param {object} y Source object.
@@ -502,6 +473,12 @@ var skel = (function() {
 			/* API */
 
 				/**
+				 * Temporary element for canUseProperty()
+				 * @type {DOMElement}
+				 */
+				canUseProperty_element: null,
+
+				/**
 				 * Determines if a breakpoint applies to the current browser state.
 				 * @param {string} k Breakpoint ID.
 				 * @return {bool} Breakpoint applicability.
@@ -511,6 +488,29 @@ var skel = (function() {
 					return (
 						_.breakpoints[k]
 						&& (_.breakpoints[k].test)()
+					);
+
+				},
+
+				/**
+				 * Determines if the browser supports a given property.
+				 * @param {string} p Property.
+				 * @return {bool} True if property is supported, false if not.
+				 */
+				canUseProperty: function(p) {
+
+					if (!_.canUseProperty_element)
+						_.canUseProperty_element = document.createElement('div');
+
+					var e = _.canUseProperty_element.style,
+						up = p.charAt(0).toUpperCase() + p.slice(1);
+
+					return	(
+								p in e
+							||	('Moz' + up) in e
+							||	('Webkit' + up) in e
+							||	('O' + up) in e
+							||	('ms' + up) in e
 					);
 
 				},
