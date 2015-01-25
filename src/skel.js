@@ -848,24 +848,33 @@ var skel = (function() {
 
 						var name = a[i];
 
-						if (!_.events[name])
-							_.events[name] = [];
-
-						_.events[name].push(f);
-
-						// If Skel's already been initialized and this is either a change or
-						// activate event, manually trigger it now.
+						// Manually trigger event if applicable.
 							if (_.isInit) {
 
 								// Change.
-									if (name == 'change')
-										(f)();
+									if (name == 'change') {
+
+										// Trigger event.
+											(f)();
+
+									}
 
 								// Activate.
-									else if (name.charAt(0) == '+' && _.isActive(name.substring(1)))
-										(f)();
+									else if (name.charAt(0) == '+' && _.isActive(name.substring(1))) {
+
+										// Trigger event.
+											(f)();
+
+									}
 
 							}
+
+						// No previous events of this type registered? Set up its array.
+							if (!_.events[name])
+								_.events[name] = [];
+
+						// Register event.
+							_.events[name].push(f);
 
 					});
 
