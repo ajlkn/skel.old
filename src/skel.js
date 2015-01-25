@@ -87,8 +87,8 @@ var skel = (function() {
 				// Grid.
 					grid: {
 
-						// Zoom.
-							zoom: 1,
+						// Responsive level.
+							level: 1,
 
 						// Sets collapse mode (false = don't collapse, true = collapse everything).
 							collapse: false,
@@ -257,16 +257,16 @@ var skel = (function() {
 			forceDefaultState: false,
 
 			/**
-			 * Grid zoom map.
+			 * Grid responsive level map.
 			 * @type object
 			 */
-			gridZoomMap: { k: {}, v: {} },
+			gridLevelMap: { k: {}, v: {} },
 
 			/**
-			 * Maximum grid zoom.
+			 * Maximum grid responsive level.
 			 * @type integer
 			 */
-			gridZoomMax: 1,
+			gridLevelMax: 1,
 
 			/**
 			 * Are we initialized?
@@ -656,10 +656,10 @@ var skel = (function() {
 
 						// Get "important" cells.
 
-							// Via zoom.
-								for (i=1; i <= _.gridZoomMax; i++) {
+							// Via responsive level.
+								for (i=1; i <= _.gridLevelMax; i++) {
 
-									a = _.getElementsByClassName('important(' + _.gridZoomMap.k[i] + ')');
+									a = _.getElementsByClassName('important(' + _.gridLevelMap.k[i] + ')');
 
 									_.iterate(a, function(k) {
 										cells.push(a[k]);
@@ -682,7 +682,7 @@ var skel = (function() {
 										return;
 
 								var cell = cells[i], parent = cell.parentNode,
-									placeholder, mode = false, k, z;
+									placeholder, mode = false, k, l;
 
 								// No parent? Bail.
 									if (!parent)
@@ -697,9 +697,9 @@ var skel = (function() {
 												if (state.config.grid.collapse && cell.className.match(/important\(collapse\)/))
 													mode = 'c';
 
-											// Zoom?
-												else if (cell.className.match(/important\((.+)\)/) && (z = parseInt(_.gridZoomMap.v[RegExp.$1])) <= state.config.grid.zoom)
-													mode = 'z';
+											// Responsive level?
+												else if (cell.className.match(/important\((.+)\)/) && (l = parseInt(_.gridLevelMap.v[RegExp.$1])) <= state.config.grid.level)
+													mode = 'l';
 
 										// No valid mode? Bail.
 											if (!mode)
@@ -722,14 +722,14 @@ var skel = (function() {
 
 											parent.insertBefore(
 												cell,
-												(_.config.RTL && mode == 'z') ? parent.lastChild : parent.firstChild
+												(_.config.RTL && mode == 'l') ? parent.lastChild : parent.firstChild
 											);
 
 										// Mark cell as moved.
 											cell[key] = {
 												placeholder: placeholder,
 												mode: mode,
-												zoom: z
+												level: l
 											};
 
 									}
@@ -742,7 +742,7 @@ var skel = (function() {
 
 										// Cell doesn't need to move? Bail.
 											if (mode == 'c' && state.config.grid.collapse
-											||	mode == 'z' && cell[key].zoom <= state.config.grid.zoom)
+											||	mode == 'l' && cell[key].level <= state.config.grid.level)
 												return;
 
 										// Move cell back to its original location (using our placeholder).
@@ -750,7 +750,7 @@ var skel = (function() {
 
 											parent.insertBefore(
 												cell,
-												(_.config.RTL && mode == 'z') ? placeholder.previousSibling : placeholder.nextSibling
+												(_.config.RTL && mode == 'l') ? placeholder.previousSibling : placeholder.nextSibling
 											);
 
 										// Unmark cell as moved.
@@ -1547,19 +1547,19 @@ var skel = (function() {
 										console.log('[skel] -- ' + id);
 										state.elements.push(x);
 
-								// ELEMENT: (CSS) Grid / Zoom.
+								// ELEMENT: (CSS) Grid / Responsive Level.
 
-									if (state.config.grid.zoom > 1) {
+									if (state.config.grid.level > 1) {
 
-										id = 'igZ' + state.config.grid.zoom;
+										id = 'igZ' + state.config.grid.level;
 
 										if (!(x = _.getCachedElement(id))) {
 
 											// Generate CSS.
 												s1 = '';
 
-												for (i=2; i <= state.config.grid.zoom; i++)
-														s1 += _.css.gc('\\28 ' + _.gridZoomMap.k[i] + '\\29');
+												for (i=2; i <= state.config.grid.level; i++)
+														s1 += _.css.gc('\\28 ' + _.gridLevelMap.k[i] + '\\29');
 
 											// Build Element.
 												x = _.cacheNewElement(
@@ -2208,8 +2208,8 @@ var skel = (function() {
 									_.config.grid
 								);
 
-							// Update maximum grid zoom.
-								_.gridZoomMax = Math.max(_.gridZoomMax, _.config.grid.zoom);
+							// Update maximum grid responsive level.
+								_.gridLevelMax = Math.max(_.gridLevelMax, _.config.grid.level);
 
 						// Viewport config.
 
@@ -2276,9 +2276,13 @@ var skel = (function() {
 											&&	!_.isArray(c.grid.gutters))
 												c.grid.gutters = [c.grid.gutters, c.grid.gutters];
 
-										// Update maximum grid zoom.
+										// (Deprecated) Zoom level.
 											if ('zoom' in c.grid)
-												_.gridZoomMax = Math.max(_.gridZoomMax, c.grid.zoom);
+												c.grid.level = c.grid.zoom;
+
+										// Update maximum grid responsive level.
+											if ('level' in c.grid)
+												_.gridLevelMax = Math.max(_.gridLevelMax, c.grid.level);
 
 									}
 
@@ -2304,34 +2308,34 @@ var skel = (function() {
 
 						});
 
-					// If a grid zoom level greater than 1 has been explicitly defined or we're in static mode,
+					// If a grid responsive level greater than 1 has been explicitly defined or we're in static mode,
 					// update map accordingly.
-						if (_.gridZoomMax > 1
+						if (_.gridLevelMax > 1
 						||	_.isStatic) {
 
-							for (i=2; i <= _.gridZoomMax; i++)
-								_.gridZoomMap.k[i] = _.gridZoomMap.v[i] = i;
+							for (i=2; i <= _.gridLevelMax; i++)
+								_.gridLevelMap.k[i] = _.gridLevelMap.v[i] = i;
 
 						}
 
-					// Otherwise, automatically assign zoom levels to each breakpoint.
+					// Otherwise, automatically assign responsive levels to each breakpoint.
 						else {
 
 							_.iterate(_.config.breakpoints, function(id) {
 
 								var c = _.config.breakpoints[id];
 
-								_.gridZoomMax++
+								_.gridLevelMax++
 
 								if (!('grid' in c))
 									c.grid = {};
 
-								// Set zoom level.
-									c.grid.zoom = _.gridZoomMax;
+								// Set responsive level.
+									c.grid.level = _.gridLevelMax;
 
-								// Update map (breakpoint ID => zoom level)
-									_.gridZoomMap.k[_.gridZoomMax] = id;
-									_.gridZoomMap.v[id] = _.gridZoomMax;
+								// Update map (breakpoint ID => responsive level)
+									_.gridLevelMap.k[_.gridLevelMax] = id;
+									_.gridLevelMap.v[id] = _.gridLevelMax;
 
 							});
 
