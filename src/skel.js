@@ -879,6 +879,18 @@ var skel = (function() {
 
 									}
 
+								// Not.
+									else if (name.charAt(0) == '!' && !_.isActive(name.substring(1))) {
+
+										// Trigger event.
+											(f)();
+
+										// This only gets called once, so there's no need to actually
+										// register it.
+											return;
+
+									}
+
 							}
 
 						// No previous events of this type registered? Set up its array.
