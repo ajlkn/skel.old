@@ -2,9 +2,10 @@
 
 Skel is a lightweight, low-level framework for building responsive sites and web apps.
 
-* Site: http://getskel.com
-* Documentation: http://getskel.com/docs
-* Minified version for production: http://getskel.com/downloads/skel.min.js
+* Site: [getskel.com](http://getskel.com)
+* Documentation: [getskel.com/docs](http://getskel.com/docs)
+* Minified versions for production: `dist/`
+
 
 ## Credits
 
@@ -13,6 +14,7 @@ Skel is a lightweight, low-level framework for building responsive sites and web
 * matchMedia() polyfill (http://github.com/paulirish/matchMedia.js | (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas, David Knight | Dual MIT/BSD license)
 * Normalize (http://git.io/normalize | Nicolas Gallagher, Jonathan Neal | MIT License)
 * UMD Wrapper (http://github.com/umdjs/umd/blob/master/returnExports.js | @umdjs + @nason)
+
 
 ## License
 
