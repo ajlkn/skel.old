@@ -2,9 +2,8 @@
 
 Skel is a lightweight, low-level framework for building responsive sites and web apps.
 
-* Site: [getskel.com](http://getskel.com)
-* Documentation: [getskel.com/docs](http://getskel.com/docs)
-* Minified versions for production: `dist/`
+* Documentation: [`docs/`](docs/)
+* Minified versions for production: [`dist/`](dist/)
 
 _(This is the old version of Skel. For the latest version, go here: [github.com/n33/skel](http://github.com/n33/skel))_
 
