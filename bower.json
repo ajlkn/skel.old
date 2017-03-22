@@ -6,5 +6,9 @@
 	"homepage": "http://getskel.com",
 	"license": "MIT",
 	"ignore": [ ],
-	"main": "./src/skel.js"
+	"main": [
+		"./src/skel.js",
+		"./src/skel-layers.js",
+		"./src/skel.css"
+	]
 }
